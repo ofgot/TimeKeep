@@ -5,7 +5,7 @@ Autoři: Daria Kuznetsova a Matěj Charousek
 
 Krátký popis očekávané funkcionality:
 
-Memo je sociální síť, která uživatelům umožňuje vytvářet a sdílet "časové kapsle" a vzpomínky s obsahem jako jsou texty, fotografie, videa nebo hlasové vzkazy. Kapsle jsou uzamčeny a otevřou se až v budoucnosti v předem stanoveném čase. Není možné je otevřít dříve, než přijde čas, ani je upravit, ale je možné je smazat. Kapsle po odemčení uvidí pouze autor/autoři konkrétní kapsle. Aplikace umožňuje kromě kapslí uživateli vytvářet skupiny (privátní, otevřené) a přidávat tam další uživatele. Ve skupinách se sdílí vzpomínky, které nejsou nijak časově uzamčené.
+Memo je sociální síť, která uživatelům umožňuje vytvářet a sdílet "časové kapsle" a vzpomínky s obsahem jako jsou texty, fotografie, videa nebo hlasové vzkazy. Kapsle jsou uzamčeny a otevřou se až v budoucnosti v předem stanoveném čase. Není možné je otevřít dříve, než přijde čas, ani je upravit, ale je možné je smazat. Kapsle po odemčení uvidí pouze autor/autoři konkrétní kapsle. Aplikace umožňuje kromě kapslí premium uživateli vytvářet privátní skupiny a přidávat tam další uživatele. Běžný uživatel nesmí vytvářet skupiny, ani do nich přidávat další uživatele, ani je odebírat. To smí pouze premium user. Ve skupině lze vytvářet vzpomínkyh a kapsle.
 
 Seznam hlavních funkcí aplikace:
 
