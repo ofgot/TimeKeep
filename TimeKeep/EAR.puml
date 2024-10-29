@@ -1,0 +1,43 @@
+@startuml
+
+class "User"{
+    id : Integer
+    firstName : String
+    surname : String
+    username : String
+    password : String
+    isPremium : boolean
+}
+
+class "Group" {
+    id : Integer
+    name : String
+}
+
+class "Post" {
+    id : Integer
+    name : String
+    text : String
+    voice-record : String
+    video : String
+    dateOfCreation : Date
+}
+
+class "Capsule" {
+    dateOfOpening : Date
+    open : boolean
+}
+
+class "Memory" {
+
+}
+
+Memory --|> Post : is >
+Capsule  --|> Post : is >
+
+User "1" --* "0.*" Group : create >
+User "0.*" --* "0.*" Group : has >
+User "1" --* "0.*" Post : create >
+Group "1" --o "0.*" Post : has >
+
+@enduml
