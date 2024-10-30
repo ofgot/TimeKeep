@@ -5,6 +5,7 @@ class "User"{
     firstName : String
     surname : String
     username : String
+    email : String
     password : String
     isPremium : boolean
 }
