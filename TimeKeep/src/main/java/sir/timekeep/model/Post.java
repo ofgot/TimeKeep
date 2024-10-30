@@ -15,15 +15,15 @@ public abstract class Post extends AbstractEntity {
     private String name;
 
     @Basic(optional = false)
-    @Column(name="text", nullable = false)
+    @Column(name="text")
     private String text;
 
     @Basic(optional = false)
-    @Column(name="record", nullable = false)
+    @Column(name="record")
     private String record;
 
     @Basic(optional = false)
-    @Column(name="video", nullable = false)
+    @Column(name="video")
     private String video;
 
     @Basic(optional = false)
