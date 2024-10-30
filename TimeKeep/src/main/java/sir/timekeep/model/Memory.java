@@ -6,7 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
 @Entity
-@Table (name = "MEMORY")
+@Table (name = "MEMO_MEMORY")
 @DiscriminatorValue("Memory")
 public class Memory extends Post {
 

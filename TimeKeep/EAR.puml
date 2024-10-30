@@ -1,7 +1,11 @@
 @startuml
 
+enum "Roles"{
+    superUser
+    normalUser
+}
+
 class "User"{
-    id : Integer
     firstName : String
     surname : String
     username : String
@@ -11,12 +15,10 @@ class "User"{
 }
 
 class "Group" {
-    id : Integer
     name : String
 }
 
 class "Post" {
-    id : Integer
     name : String
     text : String
     voice-record : String
@@ -36,6 +38,7 @@ class "Memory" {
 Memory --|> Post : is >
 Capsule  --|> Post : is >
 
+User -- Roles
 User "1" --* "0.*" Group : create >
 User "0.*" --* "0.*" Group : has >
 User "1" --* "0.*" Post : create >
