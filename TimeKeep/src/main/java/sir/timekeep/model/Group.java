@@ -21,4 +21,30 @@ public class Group extends AbstractEntity {
     @OneToMany(mappedBy = "group")
     private List<Post> posts;
 
+    // getters
+    public String getName() {return name;}
+
+    public List<User> getUsers() {return users;}
+
+    public User getGroupCreator() {return groupCreator;}
+
+    public List<Post> getPosts() {return posts;}
+
+    // setters
+    public void setName(String name) {this.name = name;}
+
+    public void setUsers(List<User> users) {this.users = users;}
+
+    public void setGroupCreator(User groupCreator) {this.groupCreator = groupCreator;}
+
+    public void setPosts(List<Post> posts) {this.posts = posts;}
+
+    // extra
+    @Override
+    public String toString() {
+        return "Group{" +
+                "name='" + name + '\'' +
+                ", groupCreator=" + groupCreator +
+                '}';
+    }
 }
