@@ -21,6 +21,10 @@ public class User extends AbstractEntity{
     private String userName;
 
     @Basic(optional = false)
+    @Column(name="email", nullable = false)
+    private boolean email;
+
+    @Basic(optional = false)
     @Column(name="password", nullable = false)
     private String password;
 

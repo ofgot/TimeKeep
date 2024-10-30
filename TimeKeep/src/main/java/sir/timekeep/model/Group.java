@@ -11,10 +11,6 @@ public class Group extends AbstractEntity {
     @Column(name="name", nullable = false)
     private String name;
 
-    @Basic(optional = false)
-    @Column(name="firstname", nullable = false)
-    private String firstName;
-
     @ManyToMany(mappedBy = "groups")
     private List<User> users;
 
