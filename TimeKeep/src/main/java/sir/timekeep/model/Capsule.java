@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table (name = "CAPSULE")
+@Table (name = "MEMO_CAPSULE")
 @DiscriminatorValue("Capsule")
 public class Capsule extends Post{
 

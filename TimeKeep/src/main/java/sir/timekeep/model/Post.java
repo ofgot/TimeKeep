@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "POST")
+@Table(name = "MEMO_POST")
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "POST_TYPE", discriminatorType = DiscriminatorType.STRING)
 public abstract class Post extends AbstractEntity {

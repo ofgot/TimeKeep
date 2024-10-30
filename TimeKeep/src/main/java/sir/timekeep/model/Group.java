@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@Table (name = "GROUP")
+@Table (name = "MEMO_GROUP")
 public class Group extends AbstractEntity {
     @Basic(optional = false)
     @Column(name="name", nullable = false)
