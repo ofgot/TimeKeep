@@ -11,23 +11,23 @@ import java.util.Date;
 public abstract class Post extends AbstractEntity {
 
     @Basic(optional = false)
-    @Column(name="name", nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Basic(optional = false)
-    @Column(name="text")
+    @Column(name = "text")
     private String text;
 
     @Basic(optional = false)
-    @Column(name="record")
+    @Column(name = "record")
     private String record;
 
     @Basic(optional = false)
-    @Column(name="video")
+    @Column(name = "video")
     private String video;
 
     @Basic(optional = false)
-    @Column(name="dateOfCreation", nullable = false)
+    @Column(name = "dateOfCreation", nullable = false)
     private Date dateOfCreation;
 
     @ManyToOne
@@ -37,4 +37,43 @@ public abstract class Post extends AbstractEntity {
     @ManyToOne
     @JoinColumn(name = "group_id")
     private Group group;
+
+    // getters
+    public String getName() {return name;}
+
+    public String getText() {return text;}
+
+    public String getRecord() {return record;}
+
+    public String getVideo() {return video;}
+
+    public Date getDateOfCreation() {return dateOfCreation;}
+
+    public User getPostCreator() {return postCreator;}
+
+    public Group getGroup() {return group;}
+
+    // setters
+    public void setName(String name) {this.name = name;}
+
+    public void setText(String text) {this.text = text;}
+
+    public void setRecord(String record) {this.record = record;}
+
+    public void setVideo(String video) {this.video = video;}
+
+    public void setDateOfCreation(Date dateOfCreation) {this.dateOfCreation = dateOfCreation;}
+
+    public void setPostCreator(User postCreator) {this.postCreator = postCreator;}
+
+    public void setGroup(Group group) {this.group = group;}
+
+    // extra
+    @Override
+    public String toString() {
+        return "Post{" +
+                "name='" + name + '\'' +
+                ", postCreator=" + postCreator +
+                '}';
+    }
 }
