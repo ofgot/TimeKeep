@@ -5,5 +5,7 @@ import sir.timekeep.model.Group;
 
 @Repository
 public class GroupDao extends BaseDao<Group> {
-    public GroupDao() {super(Group.class);}
+    public GroupDao() {
+        super(Group.class);
+    }
 }

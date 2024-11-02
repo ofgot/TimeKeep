@@ -9,7 +9,7 @@ public interface GenericDao <T>{
 
     List<T> findAll();
 
-    Optional<List<T>> findAllWhereCreator(Integer postCreatorId);
+    Optional<List<T>> findAllByCreator(Integer creatorId);
 
     void persist(T entity);
 
