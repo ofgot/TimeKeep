@@ -23,6 +23,10 @@ public abstract class Post extends AbstractEntity {
     private String record;
 
     @Basic(optional = false)
+    @Column(name = "photo")
+    private String photo;
+
+    @Basic(optional = false)
     @Column(name = "video")
     private String video;
 
@@ -47,6 +51,8 @@ public abstract class Post extends AbstractEntity {
 
     public String getVideo() {return video;}
 
+    public String getPhoto() {return photo;}
+
     public Date getDateOfCreation() {return dateOfCreation;}
 
     public User getPostCreator() {return postCreator;}
@@ -59,6 +65,8 @@ public abstract class Post extends AbstractEntity {
     public void setText(String text) {this.text = text;}
 
     public void setRecord(String record) {this.record = record;}
+
+    public void setPhoto(String photo) {this.photo = photo;}
 
     public void setVideo(String video) {this.video = video;}
 
