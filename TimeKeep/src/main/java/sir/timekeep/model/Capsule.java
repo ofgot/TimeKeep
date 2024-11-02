@@ -2,6 +2,7 @@ package sir.timekeep.model;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -10,20 +11,20 @@ import java.util.Date;
 public class Capsule extends Post{
 
     @Basic(optional = false)
-    @Column(name="dateOfOpening", nullable = false)
-    private Date dateOfOpening;
+    @Column(name="timeOfOpening", nullable = false)
+    private LocalDateTime timeOfOpening;
 
     @Basic(optional = false)
     @Column(name="open", nullable = false)
     private boolean open;
 
     // getters
-    public Date getDateOfOpening() {return dateOfOpening;}
+    public LocalDateTime getDateOfOpening() {return timeOfOpening;}
 
     public boolean isOpen() {return open;}
 
     // setters
-    public void setDateOfOpening(Date dateOfOpening) {this.dateOfOpening = dateOfOpening;}
+    public void setDateOfOpening(LocalDateTime timeOfOpening) {this.timeOfOpening = timeOfOpening;}
 
     public void setOpen(boolean open) {this.open = open;}
 
@@ -31,7 +32,7 @@ public class Capsule extends Post{
     @Override
     public String toString() {
         return "Capsule{" +
-                "dateOfOpening=" + dateOfOpening +
+                "timeOfOpening=" + timeOfOpening +
                 '}';
     }
 }
