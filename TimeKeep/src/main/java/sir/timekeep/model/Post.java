@@ -2,6 +2,7 @@ package sir.timekeep.model;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -31,8 +32,8 @@ public abstract class Post extends AbstractEntity {
     private String video;
 
     @Basic(optional = false)
-    @Column(name = "dateOfCreation", nullable = false)
-    private Date dateOfCreation;
+    @Column(name = "timeOfCreation", nullable = false)
+    private LocalDateTime timeOfCreation;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -53,7 +54,7 @@ public abstract class Post extends AbstractEntity {
 
     public String getPhoto() {return photo;}
 
-    public Date getDateOfCreation() {return dateOfCreation;}
+    public LocalDateTime getDateOfCreation() {return timeOfCreation;}
 
     public User getPostCreator() {return postCreator;}
 
@@ -70,7 +71,7 @@ public abstract class Post extends AbstractEntity {
 
     public void setVideo(String video) {this.video = video;}
 
-    public void setDateOfCreation(Date dateOfCreation) {this.dateOfCreation = dateOfCreation;}
+    public void setDateOfCreation(LocalDateTime timeOfCreation) {this.timeOfCreation = timeOfCreation;}
 
     public void setPostCreator(User postCreator) {this.postCreator = postCreator;}
 
