@@ -51,7 +51,7 @@ public class User extends AbstractEntity {
     @OneToMany(mappedBy = "postCreator")
     private List<Post> posts;
 
-    protected User() {}
+    public User() {}
 
     public User(String name, String surname, String userName, String email, String password) {
         this.name = name;
