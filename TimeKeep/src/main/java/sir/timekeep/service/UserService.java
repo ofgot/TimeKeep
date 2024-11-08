@@ -74,7 +74,7 @@ public class UserService {
                 group.setUsers(new ArrayList<>());
             }
             if (!group.getUsers().contains(userToAdd)) {
-                group.getUsers().add(userToAdd);
+                group.addUser(userToAdd);
             } else {
                 throw new UserNotAllowedException(userToAdd + " already in this group");
             }
