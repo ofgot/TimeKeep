@@ -88,7 +88,7 @@ public class UserService {
         if (user.isPremium() && group.getGroupCreator().equals(user)) {
             List<User> users = group.getUsers();
             if (users != null && users.contains(userToRemove)) {
-                users.remove(userToRemove);
+                group.removeUser(userToRemove);
                 groupDao.update(group);
             }
         } else {
