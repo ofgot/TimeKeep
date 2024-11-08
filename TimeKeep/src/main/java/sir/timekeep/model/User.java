@@ -8,7 +8,7 @@ import java.util.List;
 @Entity
 @Table(name = "MEMO_USER")
 @NamedQueries({
-        @NamedQuery(name = "User.findByUsername", query = "SELECT u FROM User u WHERE u.userName = :username")
+        @NamedQuery(name = "User.findByUsername", query = "SELECT u FROM User u WHERE u.username = :username")
 })
 public class User extends AbstractEntity {
 
@@ -22,7 +22,7 @@ public class User extends AbstractEntity {
 
     @Basic(optional = false)
     @Column(name = "username", nullable = false, unique = true)
-    private String userName;
+    private String username;
 
     @Basic(optional = false)
     @Column(name = "email", nullable = false, unique = true)
@@ -53,10 +53,10 @@ public class User extends AbstractEntity {
 
     public User() {}
 
-    public User(String name, String surname, String userName, String email, String password) {
+    public User(String name, String surname, String username, String email, String password) {
         this.name = name;
         this.surname = surname;
-        this.userName = userName;
+        this.username = username;
         this.email = email;
         this.password = password;
         this.role = Role.USUAL;
@@ -67,7 +67,7 @@ public class User extends AbstractEntity {
 
     public String getSurname() {return surname;}
 
-    public String getUserName() {return userName;}
+    public String getUsername() {return username;}
 
     public String getEmail() {return email;}
 
@@ -86,7 +86,7 @@ public class User extends AbstractEntity {
 
     public void setSurname(String surname) {this.surname = surname;}
 
-    public void setUserName(String userName) {this.userName = userName;}
+    public void setUsername(String userName) {this.username = userName;}
 
     public void setEmail(String email) {this.email = email;}
 
@@ -115,7 +115,7 @@ public class User extends AbstractEntity {
     public String toString() {
         return "User{" +
                 "name='" + name + '\'' +
-                ", userName='" + userName + '\'' +
+                ", userName='" + username + '\'' +
                 ", surname='" + surname + '\'' +
                 ", role=" + role +
                 '}';

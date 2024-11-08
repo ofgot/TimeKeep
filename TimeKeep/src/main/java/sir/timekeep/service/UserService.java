@@ -10,8 +10,7 @@ import sir.timekeep.model.Group;
 import sir.timekeep.model.User;
 import sir.timekeep.util.Constants;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 public class UserService {
@@ -46,6 +45,9 @@ public class UserService {
     @Transactional
     public void createGroup(User user, Group group) {
         if (user.isPremium()){
+            if (user.getCreatedGroups() == null) {
+                user.setCreatedGroups(new ArrayList<>());
+            }
             group.setGroupCreator(user);
             user.getCreatedGroups().add(group);
             groupDao.persist(group);
@@ -53,8 +55,9 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public List<Group> getGroupsOfUser(User user) {
-        return user.getCreatedGroups();
+    public Optional<List<Group>> getCreatedGroupsOfUser(User user) {
+        List<Group> groups = userDao.findAllCreatedGroups(user).orElse(Collections.emptyList());
+        return Optional.of(groups);
     }
 
     @Transactional
