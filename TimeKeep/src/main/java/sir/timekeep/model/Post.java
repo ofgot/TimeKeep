@@ -15,18 +15,22 @@ public abstract class Post extends AbstractEntity {
     private String name;
 
     @Basic(optional = false)
+    @Column(name = "type")
+    private PostType type;
+
+    //@Basic(optional = false)
     @Column(name = "text")
     private String text;
 
-    @Basic(optional = false)
+    //@Basic(optional = false)
     @Column(name = "record")
     private String record;
 
-    @Basic(optional = false)
+    //@Basic(optional = false)
     @Column(name = "photo")
     private String photo;
 
-    @Basic(optional = false)
+    //@Basic(optional = false)
     @Column(name = "video")
     private String video;
 
@@ -41,6 +45,21 @@ public abstract class Post extends AbstractEntity {
     @ManyToOne
     @JoinColumn(name = "group_id")
     private Group group;
+
+    // constructors
+    public Post(){}
+
+    protected Post(String name, String link, PostType postType){
+        this.name = name;
+        this.timeOfCreation = LocalDateTime.now();
+        switch(postType) {
+            case TEXT -> this.text = link;
+            case RECORD -> this.record = link;
+            case PHOTO -> this.photo = link;
+            case VIDEO -> this.video = link;
+        }
+        this.type = postType;
+    }
 
     // getters
     public String getName() {return name;}

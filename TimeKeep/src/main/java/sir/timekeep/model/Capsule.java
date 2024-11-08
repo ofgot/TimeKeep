@@ -17,6 +17,15 @@ public class Capsule extends Post{
     @Column(name="open", nullable = false)
     private boolean open;
 
+    // constructors
+    public Capsule(){}
+
+    public Capsule(String name, String link, LocalDateTime timeOfOpening, PostType postType) {
+        super(name, link, postType);
+        this.timeOfOpening = timeOfOpening;
+        this.open = false;
+    }
+
     // getters
     public LocalDateTime getDateOfOpening() {return timeOfOpening;}
 
