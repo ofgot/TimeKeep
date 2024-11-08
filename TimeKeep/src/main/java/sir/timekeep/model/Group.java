@@ -39,6 +39,14 @@ public class Group extends AbstractEntity {
 
     public void setPosts(List<Post> posts) {this.posts = posts;}
 
+    public void addUser(User user){
+        users.add(user);
+    }
+
+    public void removeUser(User user){
+        users.remove(user);
+    }
+
     // extra
     @Override
     public String toString() {
