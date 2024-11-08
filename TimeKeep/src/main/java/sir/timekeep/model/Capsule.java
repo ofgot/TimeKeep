@@ -3,6 +3,7 @@ package sir.timekeep.model;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table (name = "MEMO_CAPSULE")
@@ -14,29 +15,26 @@ public class Capsule extends Post{
     private LocalDateTime timeOfOpening;
 
     @Basic(optional = false)
-    @Column(name="open", nullable = false)
-    private boolean open;
+    @Column(name="isOpen", nullable = false)
+    private boolean isOpen;
 
     // constructors
     public Capsule(){}
 
-    public Capsule(String name, String link, LocalDateTime timeOfOpening, PostType postType) {
-        super(name, link, postType);
+    public Capsule(String name, List<Media> media, LocalDateTime timeOfCreation, User postCreator, Group group, LocalDateTime timeOfOpening) {
+        super(name, timeOfCreation, postCreator, media, group);
         this.timeOfOpening = timeOfOpening;
-        this.open = false;
+        this.isOpen = false;
     }
 
-    // getters
-    public LocalDateTime getDateOfOpening() {return timeOfOpening;}
+    //getters
 
-    public boolean isOpen() {return open;}
-
-    // setters
-    public void setDateOfOpening(LocalDateTime timeOfOpening) {this.timeOfOpening = timeOfOpening;}
-
-    public void setOpen(boolean open) {this.open = open;}
+    public boolean isOpen() {
+        return isOpen;
+    }
 
     //extra
+
     @Override
     public String toString() {
         return "Capsule{" +
