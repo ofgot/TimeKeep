@@ -63,7 +63,7 @@ public class UserService {
             List<Group> groups = userDao.findAllCreatedGroups(user).orElse(Collections.emptyList());
             return Optional.of(groups);
         } else {
-            throw new UserNotAllowedException(user + " is not allowed to create groups");
+            throw new UserNotAllowedException(user + " is not allowed to have groups");
         }
     }
 
