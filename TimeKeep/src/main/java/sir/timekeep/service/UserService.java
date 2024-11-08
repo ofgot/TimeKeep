@@ -65,7 +65,9 @@ public class UserService {
         if (user.isPremium() && group.getGroupCreator().equals(user)){
             List<User> users = group.getUsers();
             if (!users.contains(userToAdd)){
-                group.getUsers().add(userToAdd);
+                //group.getUsers().add(userToAdd);
+                group.addUser(user);
+                groupDao.update(group);
             }
         }
     }
@@ -73,8 +75,10 @@ public class UserService {
     @Transactional
     public void removeUserFromGroup(User user, Group group, User userToRemove) {
         if (user.isPremium() && group.getGroupCreator().equals(user)){
-            List<User> users = group.getUsers();
-            users.remove(userToRemove);
+            //List<User> users = group.getUsers();
+            //users.remove(userToRemove);
+            group.removeUser(user);
+            groupDao.update(group);
         }
     }
 }
