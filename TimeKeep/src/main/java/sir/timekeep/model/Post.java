@@ -3,6 +3,8 @@ package sir.timekeep.model;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "MEMO_POST")
@@ -15,32 +17,16 @@ public abstract class Post extends AbstractEntity {
     private String name;
 
     @Basic(optional = false)
-    @Column(name = "type")
-    private PostType type;
-
-    //@Basic(optional = false)
-    @Column(name = "text")
-    private String text;
-
-    //@Basic(optional = false)
-    @Column(name = "record")
-    private String record;
-
-    //@Basic(optional = false)
-    @Column(name = "photo")
-    private String photo;
-
-    //@Basic(optional = false)
-    @Column(name = "video")
-    private String video;
-
-    @Basic(optional = false)
     @Column(name = "timeOfCreation", nullable = false)
     private LocalDateTime timeOfCreation;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User postCreator;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "post_id")
+    private List<Media> media;
 
     @ManyToOne
     @JoinColumn(name = "group_id")
@@ -49,28 +35,16 @@ public abstract class Post extends AbstractEntity {
     // constructors
     public Post(){}
 
-    protected Post(String name, String link, PostType postType){
+    public Post(String name, LocalDateTime timeOfCreation, User postCreator, List<Media> media, Group group) {
         this.name = name;
-        this.timeOfCreation = LocalDateTime.now();
-        switch(postType) {
-            case TEXT -> this.text = link;
-            case RECORD -> this.record = link;
-            case PHOTO -> this.photo = link;
-            case VIDEO -> this.video = link;
-        }
-        this.type = postType;
+        this.timeOfCreation = timeOfCreation;
+        this.postCreator = postCreator;
+        this.media = media;
+        this.group = group;
     }
 
     // getters
     public String getName() {return name;}
-
-    public String getText() {return text;}
-
-    public String getRecord() {return record;}
-
-    public String getVideo() {return video;}
-
-    public String getPhoto() {return photo;}
 
     public LocalDateTime getDateOfCreation() {return timeOfCreation;}
 
@@ -81,14 +55,6 @@ public abstract class Post extends AbstractEntity {
     // setters
     public void setName(String name) {this.name = name;}
 
-    public void setText(String text) {this.text = text;}
-
-    public void setRecord(String record) {this.record = record;}
-
-    public void setPhoto(String photo) {this.photo = photo;}
-
-    public void setVideo(String video) {this.video = video;}
-
     public void setDateOfCreation(LocalDateTime timeOfCreation) {this.timeOfCreation = timeOfCreation;}
 
     public void setPostCreator(User postCreator) {this.postCreator = postCreator;}
@@ -96,6 +62,14 @@ public abstract class Post extends AbstractEntity {
     public void setGroup(Group group) {this.group = group;}
 
     // extra
+
+    public void addMedia(Media media) {
+        if (this.media == null) {
+            this.media = new ArrayList<>();
+        }
+        this.media.add(media);
+    }
+
     @Override
     public String toString() {
         return "Post{" +

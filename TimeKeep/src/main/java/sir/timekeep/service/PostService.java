@@ -4,12 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sir.timekeep.dao.PostDao;
-import sir.timekeep.model.Post;
+import sir.timekeep.model.Capsule;
+import sir.timekeep.model.Memory;
+import sir.timekeep.model.User;
+import sir.timekeep.model.Group;
+import sir.timekeep.model.Media;
+import java.time.LocalDateTime;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 @Service
 public class PostService {
@@ -20,49 +22,15 @@ public class PostService {
         this.postDao = postDao;
     }
 
-    @Transactional(readOnly = true)
-    public Post find(Integer id) {
-        return postDao.find(id);
-    }
-
-    @Transactional(readOnly = true)
-    public List<Post> findAll() {
-        return postDao.findAll();
-    }
-
-    @Transactional(readOnly = true)
-    public Optional<List<Post>> findAllByCreator(Integer creatorId) {
-        return postDao.findAllByCreator(creatorId);
+    @Transactional
+    public void createMemoryPost(String name, List<Media> media, LocalDateTime timeOfCreation, User postCreator, Group group) {
+        Memory memoryPost = new Memory(name, media, timeOfCreation, postCreator, group);
+        postDao.persist(memoryPost);
     }
 
     @Transactional
-    public void persist(Post post) {
-        postDao.persist(post);
-    }
-
-    @Transactional
-    public void persist(Collection<Post> posts) {
-        postDao.persist(posts);
-    }
-
-    @Transactional
-    public Post update(Post post) {
-        return postDao.update(post);
-    }
-
-    @Transactional
-    public void remove(Post post) {
-        postDao.remove(post);
-    }
-
-    @Transactional(readOnly = true)
-    public boolean exists(Integer id) {
-        return postDao.exists(id);
-    }
-
-    @Transactional
-    public void createPost(Post post){
-        Objects.requireNonNull(post);
-        postDao.persist(post);
+    public void createCapsulePost(String name, List<Media> media, LocalDateTime timeOfCreation, User postCreator, Group group, LocalDateTime timeOfOpening) {
+        Capsule capsulePost = new Capsule(name, media, timeOfCreation, postCreator, group, timeOfOpening);
+        postDao.persist(capsulePost);
     }
 }

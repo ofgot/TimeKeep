@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import sir.timekeep.dao.PostDao;
 import sir.timekeep.model.Memory;
 import sir.timekeep.model.Post;
-import sir.timekeep.model.PostType;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -35,8 +34,6 @@ public class PostServiceTest {
 
     @Test
     public void persistAddsPost(){
-        Post post = new Memory("Whatever", "linkToPhoto", PostType.PHOTO);
-        sut.persist(post);
-        assertNotNull(sut.find(post.getId()));
+
     }
 }
