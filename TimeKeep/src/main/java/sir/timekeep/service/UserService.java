@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sir.timekeep.dao.GroupDao;
 import sir.timekeep.dao.UserDao;
+import sir.timekeep.exception.UserNotAllowedException;
 import sir.timekeep.model.Group;
 import sir.timekeep.model.User;
 import sir.timekeep.util.Constants;
@@ -44,37 +45,55 @@ public class UserService {
 
     @Transactional
     public void createGroup(User user, Group group) {
-        if (user.isPremium()){
+        if (user.isPremium()) {
             if (user.getCreatedGroups() == null) {
                 user.setCreatedGroups(new ArrayList<>());
             }
             group.setGroupCreator(user);
             user.getCreatedGroups().add(group);
             groupDao.persist(group);
+        } else {
+            throw new UserNotAllowedException(user + "is not allowed to create groups");
         }
     }
 
     @Transactional(readOnly = true)
     public Optional<List<Group>> getCreatedGroupsOfUser(User user) {
-        List<Group> groups = userDao.findAllCreatedGroups(user).orElse(Collections.emptyList());
-        return Optional.of(groups);
+        if (user.isPremium()) {
+            List<Group> groups = userDao.findAllCreatedGroups(user).orElse(Collections.emptyList());
+            return Optional.of(groups);
+        } else {
+            throw new UserNotAllowedException(user + " is not allowed to create groups");
+        }
     }
 
     @Transactional
     public void addUserToGroup(User user, Group group, User userToAdd) {
-        if (user.isPremium() && group.getGroupCreator().equals(user)){
-            List<User> users = group.getUsers();
-            if (!users.contains(userToAdd)){
-                group.getUsers().add(userToAdd);
+        if (user.isPremium() && group.getGroupCreator().equals(user)) {
+            if (group.getUsers() == null) {
+                group.setUsers(new ArrayList<>());
             }
+
+            if (!group.getUsers().contains(userToAdd)) {
+                group.getUsers().add(userToAdd);
+            } else {
+                throw new UserNotAllowedException(userToAdd + " already in this group");
+            }
+        } else {
+            throw new UserNotAllowedException(user + " is not allowed to add users to group");
         }
     }
 
     @Transactional
     public void removeUserFromGroup(User user, Group group, User userToRemove) {
-        if (user.isPremium() && group.getGroupCreator().equals(user)){
+        if (user.isPremium() && group.getGroupCreator().equals(user)) {
             List<User> users = group.getUsers();
-            users.remove(userToRemove);
+            if (users != null && users.contains(userToRemove)) {
+                users.remove(userToRemove);
+                groupDao.update(group);
+            }
+        } else {
+            throw new UserNotAllowedException(user + " is not allowed to remove users from group");
         }
     }
 }
