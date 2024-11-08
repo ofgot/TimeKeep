@@ -14,6 +14,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 import sir.timekeep.dao.UserDao;
 import sir.timekeep.environment.Generator;
+import sir.timekeep.exception.UserNotAllowedException;
 import sir.timekeep.model.Group;
 import sir.timekeep.model.Role;
 import sir.timekeep.model.User;
@@ -58,7 +59,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void createGroupForPremiumUser(){
+    public void createGroupForPremiumUser() {
         Group group = new Group();
         group.setName("test");
         sut.createGroup(premiumUser, group);
@@ -74,37 +75,88 @@ public class UserServiceTest {
     }
 
     @Test
-    public void createGroupForUsualUser(){
+    public void createGroupForUsualUser() {
         Group group = new Group();
         group.setName("test");
-        sut.createGroup(usualUser, group);
+        assertThrows(UserNotAllowedException.class, () -> {
+            sut.createGroup(usualUser, group);
+        });
 
         assertThat(group.getGroupCreator()).isNull();
         assertNull(usualUser.getCreatedGroups());
 
         User us = em.find(User.class, usualUser.getId());
         assertNull(us.getCreatedGroups());
-        assertNull(us.getCreatedGroups());
     }
 
     @Test
-    public void getCreatedGroups(){
+    public void getCreatedGroups() {
         List<Group> gr = Generator.generateGroupsForUser();
         Integer grSize = gr.size();
-        System.out.println(grSize);
 
         for (Group group : gr) {
-            group.setGroupCreator(premiumUser);
-            em.persist(group);
+            sut.createGroup(premiumUser, group);
         }
 
-        Optional<List<Group>> groups = sut.getCreatedGroupsOfUser(premiumUser);
-        System.out.println(groups.get().size());
-//        assertEquals(grSize, groups.size());
+        Optional<List<Group>> groupsFromService = sut.getCreatedGroupsOfUser(premiumUser);
+        Optional<List<Group>> groupsFromDb = userDao.findAllCreatedGroups(premiumUser);
 
-//        Optional<List<Group>> groupsFromDb = userDao.findAllCreatedGroups(premiumUser);
-//        System.out.println(groupsFromDb.get().size());
+        assertTrue(groupsFromService.isPresent());
+        assertTrue(groupsFromDb.isPresent());
+
+        assertEquals(grSize, groupsFromService.get().size());
+
+        assertEquals(groupsFromDb.get(), groupsFromService.get());
+
+        assertThrows(UserNotAllowedException.class, () -> {
+            sut.getCreatedGroupsOfUser(usualUser);
+        });
     }
 
 
+    @Test
+    public void addUserToGroupForPremiumUser() {
+        Group group = new Group();
+        group.setName("Test Group");
+        sut.createGroup(premiumUser, group);
+
+        sut.addUserToGroup(premiumUser, group, usualUser);
+
+        assertTrue(group.getUsers().contains(usualUser));
+
+        Group gr = em.find(Group.class, group.getId());
+        assertEquals(gr.getGroupCreator(), premiumUser);
+        assertTrue(gr.getUsers().contains(usualUser));
+    }
+
+    @Test
+    public void addUserToGroupForUsualUser() {
+        Group group = new Group();
+        group.setName("Test Group");
+        sut.createGroup(premiumUser, group);
+
+        final User user = Generator.generateUser();
+
+        assertThrows(UserNotAllowedException.class, () -> {
+            sut.addUserToGroup(usualUser, group, user);
+        });
+    }
+
+    @Test
+    public void removeUserToGroupForPremiumUser() {
+        Group group = new Group();
+        group.setName("Test Group");
+        sut.createGroup(premiumUser, group);
+
+        final User user = Generator.generateUser();
+        sut.addUserToGroup(premiumUser, group, user);
+        sut.addUserToGroup(premiumUser, group, usualUser);
+        sut.removeUserFromGroup(premiumUser, group, user);
+
+        Group gr = em.find(Group.class, group.getId());
+        assertEquals(gr.getGroupCreator(), premiumUser);
+        assertFalse(gr.getUsers().contains(user));
+        assertEquals(gr.getUsers().size(), 1);
+        assertTrue(gr.getUsers().contains(usualUser));
+    }
 }
