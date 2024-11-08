@@ -73,7 +73,6 @@ public class UserService {
             if (group.getUsers() == null) {
                 group.setUsers(new ArrayList<>());
             }
-
             if (!group.getUsers().contains(userToAdd)) {
                 group.getUsers().add(userToAdd);
             } else {

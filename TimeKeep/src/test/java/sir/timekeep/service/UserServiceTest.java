@@ -119,14 +119,15 @@ public class UserServiceTest {
         Group group = new Group();
         group.setName("Test Group");
         sut.createGroup(premiumUser, group);
+        final User user = Generator.generateUser();
 
-        sut.addUserToGroup(premiumUser, group, usualUser);
+        sut.addUserToGroup(premiumUser, group, user);
 
-        assertTrue(group.getUsers().contains(usualUser));
+        assertTrue(group.getUsers().contains(user));
 
         Group gr = em.find(Group.class, group.getId());
         assertEquals(gr.getGroupCreator(), premiumUser);
-        assertTrue(gr.getUsers().contains(usualUser));
+        assertTrue(gr.getUsers().contains(user));
     }
 
     @Test
