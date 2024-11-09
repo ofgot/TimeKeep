@@ -66,4 +66,16 @@ public class Generator {
         String description = "This is test memory No." + count;
         return new Memory(name, description, null, postCreator, null);
     }
+
+    public static Group generateGroup(){
+        Group group = new Group();
+        group.setName("Group No." + generateRandomInt());
+        User creator = generateUser();
+        User user2 = generateUser();
+        List <User> users = new ArrayList<>();
+        users.add(creator);
+        users.add(user2);
+        group.setGroupCreator(creator);
+        return group;
+    }
 }

@@ -21,17 +21,13 @@ public class Media extends AbstractEntity {
     @Column(name = "file_path")
     private String filePath;
 
-    @Column(name = "file_size")
-    private Long fileSize;
-
     public Media() {}
 
-    public Media(Post post, MediaType mediaType, String fileName, String filePath, Long fileSize) {
+    public Media(Post post, MediaType mediaType, String fileName, String filePath) {
         this.post = post;
         this.mediaType = mediaType;
         this.fileName = fileName;
         this.filePath = filePath;
-        this.fileSize = fileSize;
     }
 
 
