@@ -21,8 +21,8 @@ public class Capsule extends Post{
     // constructors
     public Capsule(){}
 
-    public Capsule(String name, List<Media> media, LocalDateTime timeOfCreation, User postCreator, Group group, LocalDateTime timeOfOpening) {
-        super(name, timeOfCreation, postCreator, media, group);
+    public Capsule(String name, String description, List<Media> media, User postCreator, Group group, LocalDateTime timeOfOpening) {
+        super(name, description, postCreator, media, group);
         this.timeOfOpening = timeOfOpening;
         this.isOpen = false;
     }
