@@ -28,13 +28,11 @@ public class Capsule extends Post{
     }
 
     //getters
-
     public boolean isOpen() {
         return isOpen;
     }
 
     //extra
-
     @Override
     public String toString() {
         return "Capsule{" +
