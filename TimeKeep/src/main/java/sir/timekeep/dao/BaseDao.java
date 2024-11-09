@@ -38,10 +38,13 @@ public abstract class BaseDao<T> implements GenericDao<T> {
     @Override
     public Optional<List<T>> findAllByCreator(Integer creatorId){
         try {
-            return Optional.of(em.createQuery("SELECT e FROM " + type.getSimpleName() + " e WHERE e.postCreator = :user_id", type).setParameter("user_id", creatorId).getResultList());
+            return Optional.of(em.createQuery("SELECT e FROM " + type.getSimpleName() + " e WHERE e.postCreator.id = :user_id", type)
+                    .setParameter("user_id", creatorId)
+                    .getResultList());
         } catch (RuntimeException e) {
             return Optional.empty();
         }
+
     }
 
     @Override
