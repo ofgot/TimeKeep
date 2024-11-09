@@ -40,7 +40,7 @@ public class GroupServiceTest {
     @Autowired
     private GroupService sut;
 
-    @Disabled
+//    @Disabled
     @Test
     public void persistCreatesGroupExistsWorks(){
         Group group = Generator.generateGroup();
