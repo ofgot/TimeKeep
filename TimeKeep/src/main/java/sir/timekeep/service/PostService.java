@@ -6,9 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 import sir.timekeep.dao.PostDao;
 import sir.timekeep.model.*;
 
-import java.time.LocalDateTime;
-
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -16,34 +13,16 @@ import java.util.Optional;
 @Service
 public class PostService {
     private final PostDao postDao;
-    private final PostDao memoryDao;
-    private final PostDao capsuleDao;
 
     @Autowired
-    public PostService(PostDao postDao, PostDao memoryDao, PostDao capsuleDao) {
+    public PostService(PostDao postDao) {
         this.postDao = postDao;
-        this.memoryDao = memoryDao;
-        this.capsuleDao = capsuleDao;
     }
 
-    // createPost usetri radek kodu, ale na druhou stranu by se mohl zavolat createPost a post by se neulozil
-    // do Memory/Capsule, coz nechceme. Private ale nastavit nejde kvuli Transactional
     @Transactional
     protected void createPost(Post post){
         Objects.requireNonNull(post);
         postDao.persist(post);
-    }
-
-    @Transactional
-    public void create(Memory memory){
-        createPost(memory);
-        memoryDao.persist(memory);
-    }
-
-    @Transactional
-    public void create(Capsule capsule){
-        createPost(capsule);
-        capsuleDao.persist(capsule);
     }
 
     @Transactional(readOnly = true)
@@ -62,21 +41,17 @@ public class PostService {
     }
 
     @Transactional
-    public Post update(Memory memory) {
-        memoryDao.update(memory);
-        return postDao.update(memory);
+    public Post update(Post post) {
+        postDao.update(post);
+        return post;
     }
 
     @Transactional
-    public Post update(Capsule capsule) {
-        capsuleDao.update(capsule);
-        return postDao.update(capsule);
-    }
-
-    @Transactional
-    public void remove(Capsule capsule) {
-        memoryDao.remove(capsule);
-        capsuleDao.remove(capsule);
+    public void remove(Post post) {
+        if (post == null || !postDao.exists(post.getId())) {
+            throw new IllegalArgumentException("Post not found");
+        }
+        postDao.remove(post);
     }
 
     @Transactional(readOnly = true)
