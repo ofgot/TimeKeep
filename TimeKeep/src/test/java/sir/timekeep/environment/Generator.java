@@ -1,9 +1,6 @@
 package sir.timekeep.environment;
 
-import sir.timekeep.model.Capsule;
-import sir.timekeep.model.Group;
-import sir.timekeep.model.Memory;
-import sir.timekeep.model.User;
+import sir.timekeep.model.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -71,10 +68,30 @@ public class Generator {
         Group group = new Group();
         group.setName("Group No." + generateRandomInt());
         User creator = generateUser();
-        User user2 = generateUser();
+        creator.setRole(Role.PREMIUM);
         List <User> users = new ArrayList<>();
         users.add(creator);
-        users.add(user2);
+        for (int i = 0; i < generateRandomInt(2,5); i++){
+            User tmpUser = generateUser();
+            tmpUser.setRole(Role.USUAL);
+            users.add(tmpUser);
+        }
+        group.setUsers(users);
+        group.setGroupCreator(creator);
+        return group;
+    }
+
+    public static Group generateGroupWithCreator(User creator){
+        Group group = new Group();
+        group.setName("Group No." + generateRandomInt());
+        List <User> users = new ArrayList<>();
+        users.add(creator);
+        for (int i = 0; i < generateRandomInt(2,5); i++){
+            User tmpUser = generateUser();
+            tmpUser.setRole(Role.USUAL);
+            users.add(tmpUser);
+        }
+        group.setUsers(users);
         group.setGroupCreator(creator);
         return group;
     }
