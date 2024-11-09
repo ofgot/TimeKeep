@@ -14,7 +14,7 @@ import java.util.List;
 public class Memory extends Post {
     public Memory(){}
 
-    public Memory(String name, List<Media> media, LocalDateTime timeOfCreation, User postCreator, Group group) {
-        super(name, timeOfCreation, postCreator, media, group);
+    public Memory(String name, String description, List<Media> media, User postCreator, Group group) {
+        super(name, description, postCreator, media, group);
     }
 }

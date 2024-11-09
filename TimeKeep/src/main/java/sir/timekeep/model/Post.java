@@ -16,6 +16,9 @@ public abstract class Post extends AbstractEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Column(name = "description")
+    private String description;
+
     @Basic(optional = false)
     @Column(name = "timeOfCreation", nullable = false)
     private LocalDateTime timeOfCreation;
@@ -36,9 +39,10 @@ public abstract class Post extends AbstractEntity {
     public Post() {
     }
 
-    public Post(String name, LocalDateTime timeOfCreation, User postCreator, List<Media> media, Group group) {
+    public Post(String name, String description, User postCreator, List<Media> media, Group group) {
         this.name = name;
-        this.timeOfCreation = timeOfCreation;
+        this.description = description;
+        this.timeOfCreation = LocalDateTime.now();
         this.postCreator = postCreator;
         this.media = media;
         this.group = group;
@@ -48,6 +52,8 @@ public abstract class Post extends AbstractEntity {
     public String getName() {
         return name;
     }
+
+    public String getDescription(){return description;}
 
     public LocalDateTime getDateOfCreation() {
         return timeOfCreation;
@@ -65,6 +71,8 @@ public abstract class Post extends AbstractEntity {
     public void setName(String name) {
         this.name = name;
     }
+
+    public void setDescription(String description){this.description = description;}
 
     public void setDateOfCreation(LocalDateTime timeOfCreation) {
         this.timeOfCreation = timeOfCreation;

@@ -8,8 +8,10 @@ import sir.timekeep.model.*;
 
 import java.time.LocalDateTime;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class PostService {
@@ -24,18 +26,6 @@ public class PostService {
         this.capsuleDao = capsuleDao;
     }
 
-    @Transactional
-    public void createMemoryPost(String name, List<Media> media, LocalDateTime timeOfCreation, User postCreator, Group group) {
-        Memory memoryPost = new Memory(name, media, timeOfCreation, postCreator, group);
-        postDao.persist(memoryPost);
-    }
-
-    @Transactional
-    public void createCapsulePost(String name, List<Media> media, LocalDateTime timeOfCreation, User postCreator, Group group, LocalDateTime timeOfOpening) {
-        Capsule capsulePost = new Capsule(name, media, timeOfCreation, postCreator, group, timeOfOpening);
-        postDao.persist(capsulePost);
-    }
-
     // createPost usetri radek kodu, ale na druhou stranu by se mohl zavolat createPost a post by se neulozil
     // do Memory/Capsule, coz nechceme. Private ale nastavit nejde kvuli Transactional
     @Transactional
@@ -45,15 +35,52 @@ public class PostService {
     }
 
     @Transactional
-    public void createMemory(Post post){
-        createPost(post);
-        memoryDao.persist(post);
+    public void create(Memory memory){
+        createPost(memory);
+        memoryDao.persist(memory);
     }
 
     @Transactional
-    public void createCapsule(Post post){
-        createPost(post);
-        capsuleDao.persist(post);
+    public void create(Capsule capsule){
+        createPost(capsule);
+        capsuleDao.persist(capsule);
     }
 
+    @Transactional(readOnly = true)
+    public Post find(Integer id) {
+        return postDao.find(id);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Post> findAll() {
+        return postDao.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<List<Post>> findAllByCreator(Integer creatorId) {
+        return postDao.findAllByCreator(creatorId);
+    }
+
+    @Transactional
+    public Post update(Memory memory) {
+        memoryDao.update(memory);
+        return postDao.update(memory);
+    }
+
+    @Transactional
+    public Post update(Capsule capsule) {
+        capsuleDao.update(capsule);
+        return postDao.update(capsule);
+    }
+
+    @Transactional
+    public void remove(Capsule capsule) {
+        memoryDao.remove(capsule);
+        capsuleDao.remove(capsule);
+    }
+
+    @Transactional(readOnly = true)
+    public boolean exists(Integer id) {
+        return postDao.exists(id);
+    }
 }
