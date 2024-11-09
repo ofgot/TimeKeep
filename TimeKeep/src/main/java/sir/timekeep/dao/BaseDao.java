@@ -44,7 +44,6 @@ public abstract class BaseDao<T> implements GenericDao<T> {
         } catch (RuntimeException e) {
             return Optional.empty();
         }
-
     }
 
     @Override

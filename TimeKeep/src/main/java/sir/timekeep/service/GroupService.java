@@ -15,12 +15,10 @@ import java.util.Optional;
 @Service
 public class GroupService {
     private final GroupDao groupDao;
-    private final UserDao userDao;
 
     @Autowired
-    public GroupService(GroupDao groupDao, UserDao userDao) {
+    public GroupService(GroupDao groupDao) {
         this.groupDao = groupDao;
-        this.userDao = userDao;
     }
 
     @Transactional(readOnly = true)
