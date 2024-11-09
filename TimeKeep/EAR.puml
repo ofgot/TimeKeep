@@ -1,11 +1,11 @@
 @startuml
 
-enum "Roles"{
+enum Roles {
     superUser
     normalUser
 }
 
-class "User"{
+class User{
     firstName : String
     surname : String
     username : String
@@ -14,11 +14,20 @@ class "User"{
     isPremium : boolean
 }
 
-class "Group" {
+class Group {
     name : String
 }
 
-class "Post" {
+class Media {
+    media_type : String
+    file_name : String
+    file_path : String
+    file_size : String
+    upload_time : LocalDateTime
+    description : String
+}
+
+class Post {
     name : String
     text : String
     voice-record : String
@@ -26,17 +35,18 @@ class "Post" {
     dateOfCreation : Date
 }
 
-class "Capsule" {
+class Capsule {
     dateOfOpening : Date
     open : boolean
 }
 
-class "Memory" {
+class Memory {
 
 }
 
 Memory --|> Post : is >
 Capsule  --|> Post : is >
+Media "0.*" --* "1" Post : has
 
 User -- Roles
 User "1" --* "0.*" Group : create >

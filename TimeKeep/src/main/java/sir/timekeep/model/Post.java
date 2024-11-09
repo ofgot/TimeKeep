@@ -33,7 +33,8 @@ public abstract class Post extends AbstractEntity {
     private Group group;
 
     // constructors
-    public Post(){}
+    public Post() {
+    }
 
     public Post(String name, LocalDateTime timeOfCreation, User postCreator, List<Media> media, Group group) {
         this.name = name;
@@ -44,22 +45,38 @@ public abstract class Post extends AbstractEntity {
     }
 
     // getters
-    public String getName() {return name;}
+    public String getName() {
+        return name;
+    }
 
-    public LocalDateTime getDateOfCreation() {return timeOfCreation;}
+    public LocalDateTime getDateOfCreation() {
+        return timeOfCreation;
+    }
 
-    public User getPostCreator() {return postCreator;}
+    public User getPostCreator() {
+        return postCreator;
+    }
 
-    public Group getGroup() {return group;}
+    public Group getGroup() {
+        return group;
+    }
 
     // setters
-    public void setName(String name) {this.name = name;}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public void setDateOfCreation(LocalDateTime timeOfCreation) {this.timeOfCreation = timeOfCreation;}
+    public void setDateOfCreation(LocalDateTime timeOfCreation) {
+        this.timeOfCreation = timeOfCreation;
+    }
 
-    public void setPostCreator(User postCreator) {this.postCreator = postCreator;}
+    public void setPostCreator(User postCreator) {
+        this.postCreator = postCreator;
+    }
 
-    public void setGroup(Group group) {this.group = group;}
+    public void setGroup(Group group) {
+        this.group = group;
+    }
 
     // extra
 
