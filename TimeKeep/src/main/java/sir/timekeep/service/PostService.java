@@ -1,9 +1,12 @@
 package sir.timekeep.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sir.timekeep.dao.CapsuleDao;
 import sir.timekeep.dao.PostDao;
+import sir.timekeep.dao.MemoryDao;
 import sir.timekeep.model.*;
 
 import java.util.List;
@@ -13,10 +16,30 @@ import java.util.Optional;
 @Service
 public class PostService {
     private final PostDao postDao;
+    private final MemoryDao memoryDao;
+    private final CapsuleDao capsuleDao;
 
     @Autowired
-    public PostService(PostDao postDao) {
+    public PostService(PostDao postDao, MemoryDao memoryDao, CapsuleDao capsuleDao) {
         this.postDao = postDao;
+        this.memoryDao = memoryDao;
+        this.capsuleDao = capsuleDao;
+    }
+
+    @Transactional(readOnly = true)
+    public List<Post> findAllByType(String type) {
+        //..
+        return null;
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<List<Memory>> findMemoriesByCreator(Integer creatorId) {
+        return memoryDao.findAllByCreator(creatorId);
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<List<Capsule>> findOpenCapsulesByCreator(Integer creatorId) {
+        return capsuleDao.findAllWhereCreatorIdCapsuleOpen(creatorId);
     }
 
     @Transactional
