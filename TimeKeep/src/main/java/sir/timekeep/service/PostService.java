@@ -24,13 +24,7 @@ public class PostService {
         this.memoryDao = memoryDao;
         this.capsuleDao = capsuleDao;
     }
-
-    @Transactional(readOnly = true)
-    public List<Post> findAllByType(String type) {
-        //..
-        return null;
-    }
-
+        
     @Transactional(readOnly = true)
     public Optional<List<Memory>> findMemoriesByCreator(Integer creatorId) {
         return memoryDao.findAllByCreator(creatorId);
