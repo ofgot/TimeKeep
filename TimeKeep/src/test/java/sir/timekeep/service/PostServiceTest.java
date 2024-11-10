@@ -152,4 +152,56 @@ public class PostServiceTest {
         assertTrue(memories.get().isEmpty());
     }
 
+    @Test
+    public void findMemoriesByCreatorReturnsOnlyMemoriesCreatedByThatCreator(){
+        User creator = Generator.generateUser();
+        creator.setRole(Role.USUAL);
+        userDao.persist(creator);
+        for (int i = 0; i < 3; i++){
+            sut.createPost(Generator.generateMemory(creator));
+        }
+        User creator2 = Generator.generateUser();
+        creator2.setRole(Role.USUAL);
+        userDao.persist(creator2);
+        for (int i = 0; i < 4; i++){
+            sut.createPost(Generator.generateMemory(creator2));
+        }
+        List<Memory> memories = sut.findMemoriesByCreator(creator.getId()).get();
+        assertEquals(3, memories.size());
+        for (Memory memory: memories){
+            assertEquals(creator, memory.getPostCreator());
+        }
+    }
+
+    @Test
+    public void findOpenCapsuleByCreatorReturnsOnlyCapsulesThatAreOpenAndCretedByCreator(){
+        User creator = Generator.generateUser();
+        creator.setRole(Role.USUAL);
+        userDao.persist(creator);
+        for (int i = 0; i < 6; i++){
+            if (i % 2 == 0){
+                sut.createPost(Generator.generateOpenedCapsule(creator));
+            } else {
+                sut.createPost(Generator.generateClosedCapsule(creator));
+            }
+        }
+        User creator2 = Generator.generateUser();
+        creator2.setRole(Role.USUAL);
+        userDao.persist(creator2);
+        for (int i = 0; i < 4; i++){
+            if (i % 2 == 0){
+                sut.createPost(Generator.generateOpenedCapsule(creator2));
+            } else {
+                sut.createPost(Generator.generateClosedCapsule(creator2));
+            }
+        }
+
+        List<Capsule> capsules = sut.findOpenCapsulesByCreator(creator.getId()).get();
+        assertEquals(3, capsules.size());
+        for (Capsule capsule: capsules){
+            assertEquals(creator, capsule.getPostCreator());
+            assertTrue(capsule.isOpen());
+        }
+    }
+
 }

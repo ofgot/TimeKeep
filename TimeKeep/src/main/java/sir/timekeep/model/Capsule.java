@@ -29,9 +29,11 @@ public class Capsule extends Post{
 
     //getters
     public boolean isOpen() {
+        if (timeOfOpening.isBefore(LocalDateTime.now())) {
+            isOpen = true;
+        }
         return isOpen;
     }
-
     //extra
     @Override
     public String toString() {
