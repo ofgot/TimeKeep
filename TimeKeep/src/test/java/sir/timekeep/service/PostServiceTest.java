@@ -1,7 +1,5 @@
 package sir.timekeep.service;
 
-
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureTestEntityManager;
@@ -14,10 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import sir.timekeep.dao.PostDao;
 import sir.timekeep.dao.UserDao;
 import sir.timekeep.environment.Generator;
-import sir.timekeep.model.Memory;
-import sir.timekeep.model.Post;
-import sir.timekeep.model.Role;
-import sir.timekeep.model.User;
+import sir.timekeep.model.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -117,4 +112,44 @@ public class PostServiceTest {
         sut.update(post);
         assertEquals(description, sut.find(post.getId()).getDescription());
     }
+
+
+    @Test
+    public void findMemoriesByCreator_whenCreatorExists_returnsMemoryList() {
+        User creator = Generator.generateUser();
+        creator.setRole(Role.PREMIUM);
+        em.persist(creator);
+
+        Memory memory1 = Generator.generateMemory(creator);
+        Memory memory2 = Generator.generateMemory(creator);
+        em.persist(memory1);
+        em.persist(memory2);
+
+        Optional<List<Memory>> memories = sut.findMemoriesByCreator(creator.getId());
+
+        assertTrue(memories.isPresent());
+        assertEquals(2, memories.get().size());
+        assertTrue(memories.get().contains(memory1));
+        assertTrue(memories.get().contains(memory2));
+    }
+
+    @Test
+    public void findMemoriesByCreatorWhenCreatorDoesNotExist() {
+        Optional<List<Memory>> memories = sut.findMemoriesByCreator(9999);
+        assertTrue(memories.isPresent());
+        assertTrue(memories.get().isEmpty());
+    }
+
+    @Test
+    public void findMemoriesByCreatorWhenNoMemoriesForCreatorReturnsEmptyList() {
+        User creator = Generator.generateUser();
+        creator.setRole(Role.PREMIUM);
+        em.persist(creator);
+
+        Optional<List<Memory>> memories = sut.findMemoriesByCreator(creator.getId());
+
+        assertTrue(memories.isPresent());
+        assertTrue(memories.get().isEmpty());
+    }
+
 }

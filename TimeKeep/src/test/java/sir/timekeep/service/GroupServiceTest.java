@@ -122,6 +122,7 @@ public class GroupServiceTest {
         groupDao.persist(groups);
 
         List<Group> groups2 = sut.findAll();
+        System.out.println(groups2.size());
         assertTrue(groups2.contains(group2));
         assertTrue(groups2.contains(group3));
         assertTrue(groups2.contains(group));
