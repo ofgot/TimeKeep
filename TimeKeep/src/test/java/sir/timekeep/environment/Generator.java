@@ -19,26 +19,6 @@ public class Generator {
         return random.nextInt();
     }
 
-    public static LocalDateTime generateDateTimeInPast(){
-        LocalDateTime time = LocalDateTime.now();
-        Integer year = generateRandomInt(2000, time.getYear());
-        Integer month = generateRandomInt(1, time.getMonthValue());
-        Integer day = generateRandomInt(1, time.getDayOfMonth() - 1);
-        Integer hour = generateRandomInt(1, 23);
-        Integer minute = generateRandomInt(1, 59);
-        return LocalDateTime.of(year, month, day, hour, minute);
-    }
-
-    public static LocalDateTime generateDateTimeInFuture(){
-        LocalDateTime time = LocalDateTime.now();
-        Integer year = generateRandomInt(time.getYear(), 2030);
-        Integer month = generateRandomInt(time.getMonthValue(), 12);
-        Integer day = generateRandomInt(time.getDayOfMonth(), 31);
-        Integer hour = generateRandomInt(1, 23);
-        Integer minute = generateRandomInt(1, 60);
-        return LocalDateTime.of(year, month, day, hour, minute);
-    }
-
     public static User generateUser() {
         final User user = new User();
         user.setName("FirstName" + generateRandomInt());
@@ -60,15 +40,6 @@ public class Generator {
         return groups;
     }
 
-    public static Capsule generateCapsule() {
-        int count = generateRandomInt();
-        String name = "Test capsule No." + count;
-        String description = "This is test capsule No." + count;
-        User postCreator = generateUser();
-        LocalDateTime time = LocalDateTime.of(2030, 10, 1, 10, 56);
-        return new Capsule(name, description, null, postCreator, null, time);
-    }
-
     public static Memory generateMemory() {
         int count = generateRandomInt();
         String name = "Test memory No." + count;
@@ -84,22 +55,20 @@ public class Generator {
         return new Memory(name, description, null, postCreator, null);
     }
 
-    public static Capsule generateClosedCapsule(User postCreator) {
+    public static Capsule generateCapsule(User postCreator, LocalDateTime dateTime) {
         int count = generateRandomInt();
         String name = "Test capsule No." + count;
         String description = "This is test capsule No." + count;
-        LocalDateTime time = generateDateTimeInFuture();
-        return new Capsule(name, description, null, postCreator, null, time);
+        return new Capsule(name, description, null, postCreator, null, dateTime);
     }
 
-    public static Capsule generateOpenedCapsule(User postCreator) {
-        int count = generateRandomInt();
-        String name = "Test capsule No." + count;
-        String description = "This is test capsule No." + count;
-        LocalDateTime time = generateDateTimeInPast();
-        return new Capsule(name, description, null, postCreator, null, time);
+    public static Capsule generateOpenedCapsule(User postCreator){
+        return generateCapsule(postCreator, LocalDateTime.now().plusDays(generateRandomInt(30, 7300)));
     }
 
+    public static Capsule generateClosedCapsule(User postCreator){
+        return generateCapsule(postCreator, LocalDateTime.now().minusDays(generateRandomInt(30, 7300)));
+    }
 
     public static Group generateGroup(){
         Group group = new Group();
