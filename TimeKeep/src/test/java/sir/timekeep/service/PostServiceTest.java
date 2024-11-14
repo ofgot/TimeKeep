@@ -200,7 +200,7 @@ public class PostServiceTest {
         assertEquals(3, capsules.size());
         for (Capsule capsule: capsules){
             assertEquals(creator, capsule.getPostCreator());
-            assertTrue(capsule.isOpen());
+            assertTrue(capsule.getIsOpen());
         }
     }
 

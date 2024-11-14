@@ -27,8 +27,7 @@ public abstract class Post extends AbstractEntity {
     @JoinColumn(name = "user_id")
     private User postCreator;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "post")
     private List<Media> media;
 
     @ManyToOne

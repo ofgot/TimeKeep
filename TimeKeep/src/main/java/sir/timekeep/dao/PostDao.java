@@ -4,6 +4,6 @@ import org.springframework.stereotype.Repository;
 import sir.timekeep.model.Post;
 
 @Repository
-public class PostDao extends BaseDao<Post>{
+public class PostDao extends PostMemoryCapsuleDao<Post>{
     public PostDao() {super(Post.class);}
 }
