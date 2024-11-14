@@ -35,6 +35,7 @@ public abstract class BaseDao<T> implements GenericDao<T> {
         }
     }
 
+    /*
     @Override
     public Optional<List<T>> findAllByCreator(Integer creatorId){
         try {
@@ -45,6 +46,8 @@ public abstract class BaseDao<T> implements GenericDao<T> {
             return Optional.empty();
         }
     }
+
+     */
 
     @Override
     public void persist(T entity) {
