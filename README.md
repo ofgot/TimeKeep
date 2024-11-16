@@ -12,3 +12,5 @@ Group capsules that are created by multiple users together.
 Target Audience for the Final System:
 
 Memo is intended for users who want to preserve personal memories of important life events, as well as families and groups of friends who wish to create and share memories together. Memo will also be useful for friend groups and communities who want to preserve collective experiences and memories.
+
+![image](https://github.com/user-attachments/assets/c1466f91-6a13-42e8-9b6e-608432963650)
