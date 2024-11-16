@@ -1,18 +1,14 @@
-Téma semestrální práce
-Memo - Sociální síť pro uchovávání vzpomínek a vytváření časových kapslí.
+Seminar Project Topic: Memo - A Social Network for Storing Memories and Creating Time Capsules
 
-Autoři: Daria Kuznetsova a Matěj Charousek
+Short Description of Expected Functionality:
 
-Krátký popis očekávané funkcionality:
+Memo is a social network that allows users to create and share "time capsules" and memories containing content such as text, photos, videos, or voice messages. Capsules are locked and will only open in the future at a predefined time. They cannot be opened earlier than the set time, nor can they be edited, but they can be deleted. Once unlocked, only the author(s) of the specific capsule will be able to view it. The application allows premium users to create private groups and add other users to them. Regular users are not allowed to create groups, add other users to them, or remove them; only premium users can do so. In a group, memories and capsules can be created.
 
-Memo je sociální síť, která uživatelům umožňuje vytvářet a sdílet "časové kapsle" a vzpomínky s obsahem jako jsou texty, fotografie, videa nebo hlasové vzkazy. Kapsle jsou uzamčeny a otevřou se až v budoucnosti v předem stanoveném čase. Není možné je otevřít dříve, než přijde čas, ani je upravit, ale je možné je smazat. Kapsle po odemčení uvidí pouze autor/autoři konkrétní kapsle. Aplikace umožňuje kromě kapslí premium uživateli vytvářet privátní skupiny a přidávat tam další uživatele. Běžný uživatel nesmí vytvářet skupiny, ani do nich přidávat další uživatele, ani je odebírat. To smí pouze premium user. Ve skupině lze vytvářet vzpomínkyh a kapsle.
+List of Main Features of the Application:
 
-Seznam hlavních funkcí aplikace:
+Creation of time capsules and memories with multimedia content (text, photos, videos, voice messages).
+Capsules are set to open only after a certain time period (ranging from weeks to years).
+Group capsules that are created by multiple users together.
+Target Audience for the Final System:
 
-Tvorba časových kapslí a vzpomínek s multimediálním obsahem (text, fotografie, video, hlasový vzkaz).
-Kapsle jsou nastaveny tak, aby se otevřely až po určitém čase (od týdnů po roky).
-Skupinové kapsle, které jsou vytvářeny více uživateli společně.
-
-Komu bude výsledný systém určen:
-
-Memo je určena uživatelům, kteří si chtějí uchovat své osobní vzpomínky na důležité životní události, až po rodiny a skupiny přátel, které chtějí společně vytvářet a sdílet své vzpomínky. Memo bude také užitečná i pro skupiny přátel a komunity, které si chtějí uchovávat kolektivní zážitky a vzpomínky.
+Memo is intended for users who want to preserve personal memories of important life events, as well as families and groups of friends who wish to create and share memories together. Memo will also be useful for friend groups and communities who want to preserve collective experiences and memories.
