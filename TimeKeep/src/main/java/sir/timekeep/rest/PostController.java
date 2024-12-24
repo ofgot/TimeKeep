@@ -27,22 +27,19 @@ public class PostController {
     }
 
     // TO DO: PreAuthorization based on login implementation (id of the currently logged user must be equal to id from url)
-    //@GetMapping(value ="/{id}/memories", produces = MediaType.APPLICATION_JSON_VALUE)
-    @GetMapping(value ="/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value ="/{id}/memories", produces = MediaType.APPLICATION_JSON_VALUE)
     public Optional<List<Memory>> getCreatorsMemories(@PathVariable Integer id){
         return postService.findMemoriesByCreator(id);
     }
 
     // TO DO: PreAuthorization based on login implementation (id of the currently logged user must be equal to id from url)
-    //@GetMapping(value ="/{id}/capsules", produces = MediaType.APPLICATION_JSON_VALUE)
-    @GetMapping(value ="/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value ="/{id}/capsules", produces = MediaType.APPLICATION_JSON_VALUE)
     public Optional<List<Capsule>> getCreatorsCapsules(@PathVariable Integer id){
         return postService.findOpenCapsulesByCreator(id);
     }
 
     // TO DO: PreAuthorization based on login implementation (id of the currently logged user must be equal to id from url)
-    //@GetMapping(value ="/{id}/all", produces = MediaType.APPLICATION_JSON_VALUE)
-    @GetMapping(value ="/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value ="/{id}/all", produces = MediaType.APPLICATION_JSON_VALUE)
     public Optional<List<Post>> getAllCreatorsPosts(@PathVariable Integer id){
         return postService.findAllByCreator(id);
     }
