@@ -174,7 +174,7 @@ public class PostServiceTest {
     }
 
     @Test
-    public void findOpenCapsuleByCreatorReturnsOnlyCapsulesThatAreOpenAndCretedByCreator(){
+    public void findOpenCapsuleByCreatorReturnsOnlyCapsulesThatAreOpenAndCreatedByCreator(){
         User creator = Generator.generateUser();
         creator.setRole(Role.USUAL);
         userDao.persist(creator);
