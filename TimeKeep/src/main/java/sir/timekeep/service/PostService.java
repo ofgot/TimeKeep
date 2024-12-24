@@ -36,19 +36,19 @@ public class PostService {
     }
 
     @Transactional
-    protected void createPost(Post post){
+    public void create(Post post){
         Objects.requireNonNull(post);
         postDao.persist(post);
     }
 
     @Transactional(readOnly = true)
-    public Post find(Integer id) {
-        return postDao.find(id);
+    public Optional<Post> find(Integer id) {
+        return Optional.of(postDao.find(id));
     }
 
     @Transactional(readOnly = true)
-    public List<Post> findAll() {
-        return postDao.findAll();
+    public Optional<List<Post>> findAll() {
+        return Optional.of(postDao.findAll());
     }
 
     @Transactional(readOnly = true)

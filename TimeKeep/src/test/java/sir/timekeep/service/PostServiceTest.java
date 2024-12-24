@@ -41,7 +41,7 @@ public class PostServiceTest {
     @Test
     public void persistAddsPostValuatedByFind(){
         Post post = Generator.generateMemory();
-        sut.createPost(post);
+        sut.create(post);
         assertNotNull(sut.find(post.getId()));
 
         Post post1 = em.find(Memory.class, post.getId());
@@ -55,9 +55,9 @@ public class PostServiceTest {
         userDao.persist(user1);
 
         for (int i = 0; i < 10; i++) {
-            sut.createPost(Generator.generateMemory(user1));
+            sut.create(Generator.generateMemory(user1));
         }
-        List<Post> posts = sut.findAll();
+        List<Post> posts = sut.findAll().get();
         assertEquals(10, posts.size());
     }
 
@@ -74,11 +74,11 @@ public class PostServiceTest {
 
         for (int i = 0; i < 3; i++) {
             Post memory = Generator.generateMemory(user1);
-            sut.createPost(memory);
+            sut.create(memory);
         }
         for (int i = 0; i < 7; i++) {
             Post memory = Generator.generateMemory(user2);
-            sut.createPost(memory);
+            sut.create(memory);
         }
 
         Optional<List<Post>> posts = sut.findAllByCreator(user1.getId());
@@ -89,7 +89,7 @@ public class PostServiceTest {
     @Test
     public void removePostRemovesPost(){
         Post post = Generator.generateMemory();
-        sut.createPost(post);
+        sut.create(post);
         assertNotNull(sut.find(post.getId()));
         sut.remove(post);
         assertNull(sut.find(post.getId()));
@@ -98,19 +98,19 @@ public class PostServiceTest {
     @Test
     public void addedPostExists(){
         Post post = Generator.generateMemory();
-        sut.createPost(post);
+        sut.create(post);
         assertTrue(sut.exists(post.getId()));
     }
 
     @Test
     public void updateUpdatesPostInDatabaseDescriptionIsUpdated(){
         Post post = Generator.generateMemory();
-        sut.createPost(post);
+        sut.create(post);
         assertTrue(sut.exists(post.getId()));
         String description = "New description";
         post.setDescription(description);
         sut.update(post);
-        assertEquals(description, sut.find(post.getId()).getDescription());
+        assertEquals(description, sut.find(post.getId()).get().getDescription());
     }
 
 
@@ -158,13 +158,13 @@ public class PostServiceTest {
         creator.setRole(Role.USUAL);
         userDao.persist(creator);
         for (int i = 0; i < 3; i++){
-            sut.createPost(Generator.generateMemory(creator));
+            sut.create(Generator.generateMemory(creator));
         }
         User creator2 = Generator.generateUser();
         creator2.setRole(Role.USUAL);
         userDao.persist(creator2);
         for (int i = 0; i < 4; i++){
-            sut.createPost(Generator.generateMemory(creator2));
+            sut.create(Generator.generateMemory(creator2));
         }
         List<Memory> memories = sut.findMemoriesByCreator(creator.getId()).get();
         assertEquals(3, memories.size());
@@ -180,9 +180,9 @@ public class PostServiceTest {
         userDao.persist(creator);
         for (int i = 0; i < 6; i++){
             if (i % 2 == 0){
-                sut.createPost(Generator.generateOpenedCapsule(creator));
+                sut.create(Generator.generateOpenedCapsule(creator));
             } else {
-                sut.createPost(Generator.generateClosedCapsule(creator));
+                sut.create(Generator.generateClosedCapsule(creator));
             }
         }
         User creator2 = Generator.generateUser();
@@ -190,9 +190,9 @@ public class PostServiceTest {
         userDao.persist(creator2);
         for (int i = 0; i < 4; i++){
             if (i % 2 == 0){
-                sut.createPost(Generator.generateOpenedCapsule(creator2));
+                sut.create(Generator.generateOpenedCapsule(creator2));
             } else {
-                sut.createPost(Generator.generateClosedCapsule(creator2));
+                sut.create(Generator.generateClosedCapsule(creator2));
             }
         }
 
