@@ -22,6 +22,16 @@ public class UserDao extends BaseDao<User> {
         }
     }
 
+    public Optional<User> findByEmail(String email){
+        try {
+            return Optional.of(em.createNamedQuery("User.findByEmail", User.class)
+                    .setParameter("email", email)
+                    .getSingleResult());
+        } catch (NoResultException e) {
+            return Optional.empty();
+        }
+    }
+
     public Optional<List<Group>> findAllCreatedGroups(User user){
         try {
             List<Group> groups = em.createQuery("SELECT g FROM Group g WHERE g.groupCreator = :creator", Group.class)
