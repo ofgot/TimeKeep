@@ -19,7 +19,6 @@ public class UserService {
     private final UserDao userDao;
     private final PasswordEncoder passwordEncoder;
     private final GroupDao groupDao;
-    final User currentUser = new User(); // need change latter
 
     @Autowired
     public UserService(UserDao userDao, PasswordEncoder passwordEncoder, GroupDao groupDao) {
