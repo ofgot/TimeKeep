@@ -37,13 +37,14 @@ public class UserService {
         }
 
         if (userDao.findByEmail(user.getEmail()).isPresent()) {
-            throw new ValidationException("User with this email already exists");
+            throw new UserNotAllowedException("User with this email already exists");
         }
 
-        user.encodePassword(passwordEncoder);
         if (user.getRole() == null) {
             user.setRole(Constants.DEFAULT_ROLE);
         }
+
+        user.encodePassword(passwordEncoder);
         userDao.persist(user);
     }
 

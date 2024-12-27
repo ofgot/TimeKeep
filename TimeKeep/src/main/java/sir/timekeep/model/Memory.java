@@ -16,4 +16,9 @@ public class Memory extends Post {
     public Memory(String name, String description, List<Media> media, User postCreator, Group group) {
         super(name, description, postCreator, media, group);
     }
+
+    @Override
+    public String toString() {
+        return "Memory{}";
+    }
 }

@@ -30,5 +30,13 @@ public class Media extends AbstractEntity {
         this.filePath = filePath;
     }
 
-
+    @Override
+    public String toString() {
+        return "Media{" +
+                "post=" + post +
+                ", mediaType=" + mediaType +
+                ", fileName='" + fileName + '\'' +
+                ", filePath='" + filePath + '\'' +
+                '}';
+    }
 }
