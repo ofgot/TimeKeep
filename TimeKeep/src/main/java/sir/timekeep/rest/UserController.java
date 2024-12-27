@@ -26,7 +26,7 @@ public class UserController {
     public ResponseEntity<Void> registerUser(@RequestBody User user) {
         userService.persist(user);
         final HttpHeaders headers = RestUtils.createLocationHeaderFromCurrentUri("/current");
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
 
