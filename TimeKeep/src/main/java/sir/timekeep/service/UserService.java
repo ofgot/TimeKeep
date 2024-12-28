@@ -53,6 +53,11 @@ public class UserService {
         return userDao.findByUsername(username).isPresent();
     }
 
+    @Transactional(readOnly = true)
+    public Optional<User> findByUsername(String username) {
+        return userDao.findByUsername(username);
+    }
+
     @Transactional
     public void createGroup(User user, Group group) {
         if (user.isPremium()) {

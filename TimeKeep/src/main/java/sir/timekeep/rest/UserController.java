@@ -16,7 +16,7 @@ import sir.timekeep.security.model.UserDetails;
 import sir.timekeep.service.UserService;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/rest")
 public class UserController {
     private static final Logger LOG = LoggerFactory.getLogger(UserController.class);
 
@@ -27,7 +27,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PreAuthorize("permitAll()")
     @PostMapping("/register")
     public ResponseEntity<Void> registerUser(@RequestBody User user) {
         userService.persist(user);
@@ -36,11 +35,15 @@ public class UserController {
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_USUAL', 'ROLE_PREMIUM')")
     @GetMapping(value = "/current", produces = MediaType.APPLICATION_JSON_VALUE)
-    public User getCurrent(Authentication auth) {
-        assert auth.getPrincipal() instanceof UserDetails;
-        return ((UserDetails) auth.getPrincipal()).getUser();
+    public ResponseEntity<User> getCurrent(Authentication auth) {
+        if (auth == null || !(auth.getPrincipal() instanceof UserDetails)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        User user = ((UserDetails) auth.getPrincipal()).getUser();
+        return ResponseEntity.ok(user);
+//        assert auth.getPrincipal() instanceof UserDetails;
+//        return ((UserDetails) auth.getPrincipal()).getUser();
     }
 
 }

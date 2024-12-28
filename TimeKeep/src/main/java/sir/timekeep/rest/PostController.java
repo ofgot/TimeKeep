@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/rest/users")
+@RequestMapping("/rest")
 public class PostController {
     private static final Logger LOG = LoggerFactory.getLogger(PostController.class);
 
