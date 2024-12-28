@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import sir.timekeep.exception.InsufficientAmountException;
 import sir.timekeep.exception.NotFoundException;
 import sir.timekeep.exception.PersistenceException;
 import sir.timekeep.exception.ValidationException;
