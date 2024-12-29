@@ -61,10 +61,10 @@ public class PostController {
      */
 
     @PreAuthorize("#id == authentication.principal.user.id")
-    @PostMapping("/{id}/memory")
+    @PostMapping(value = "/{id}/memory", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> createMemory(@PathVariable Integer id, @RequestBody Memory post) {
         if (!post.getPostCreator().getId().equals(id)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You cannot allow to create a post.");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You cannot create a post.");
         }
         postService.create(post);
         return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -74,7 +74,7 @@ public class PostController {
     @PostMapping("/{id}/capsule")
     public ResponseEntity<Void> createCapsule(@PathVariable Integer id, @RequestBody Capsule post) {
         if (!post.getPostCreator().getId().equals(id)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You cannot allow to create a post.");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You cannot create a post.");
         }
         postService.create(post);
         return ResponseEntity.status(HttpStatus.CREATED).build();
