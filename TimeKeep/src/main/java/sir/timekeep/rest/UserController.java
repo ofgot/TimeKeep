@@ -36,14 +36,10 @@ public class UserController {
     }
 
     @GetMapping(value = "/current", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<User> getCurrent(Authentication auth) {
-        if (auth == null || !(auth.getPrincipal() instanceof UserDetails)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-        User user = ((UserDetails) auth.getPrincipal()).getUser();
-        return ResponseEntity.ok(user);
-//        assert auth.getPrincipal() instanceof UserDetails;
-//        return ((UserDetails) auth.getPrincipal()).getUser();
+    public User getCurrent(Authentication auth) {
+        assert auth.getPrincipal() instanceof UserDetails;
+        return ((UserDetails) auth.getPrincipal()).getUser();
     }
+
 
 }
