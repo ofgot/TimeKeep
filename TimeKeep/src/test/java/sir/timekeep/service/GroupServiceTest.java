@@ -86,7 +86,7 @@ public class GroupServiceTest {
 
     @Test
     public void findReturnsDesiredGroup(){
-        assertEquals(group, sut.find(group.getId()));
+        assertEquals(group, sut.find(group.getId()).get());
     }
 
     @Test
