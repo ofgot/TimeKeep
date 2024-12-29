@@ -44,17 +44,12 @@ public class SecurityConfig{
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         final AuthenticationSuccess authSuccess = authenticationSuccess();
-        http.authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/", "/login", "/rest/register", "/h2-console/**").permitAll()
-                        .requestMatchers("/user/**").authenticated()
-                        .anyRequest().authenticated())
+        http.authorizeHttpRequests((auth) -> auth.anyRequest().permitAll())
                 .exceptionHandling(ehc -> ehc.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(conf -> conf.configurationSource(corsConfigurationSource()))
                 .headers(customizer -> customizer.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
-                .formLogin(fl -> fl.loginPage("/login")
-                        .successHandler(authSuccess)
-                        .failureHandler(authenticationFailureHandler()))
+                .formLogin(fl -> fl.successHandler(authSuccess).failureHandler(authenticationFailureHandler()))
                 .logout(lgt -> lgt.logoutSuccessHandler(authSuccess));;
         return http.build();
     }
