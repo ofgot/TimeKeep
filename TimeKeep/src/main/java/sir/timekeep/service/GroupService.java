@@ -22,8 +22,8 @@ public class GroupService {
     }
 
     @Transactional(readOnly = true)
-    public Group find(Integer id) {
-        return groupDao.find(id);
+    public Optional<Group> find(Integer id) {
+        return Optional.of(groupDao.find(id));
     }
 
     @Transactional(readOnly = true)
