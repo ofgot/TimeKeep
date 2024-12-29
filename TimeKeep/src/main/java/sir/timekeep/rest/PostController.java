@@ -3,9 +3,12 @@ package sir.timekeep.rest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import sir.timekeep.model.Capsule;
 import sir.timekeep.model.Memory;
 import sir.timekeep.model.Post;
@@ -26,22 +29,28 @@ public class PostController {
         this.postService = postService;
     }
 
-    // TO DO: PreAuthorization based on login implementation (id of the currently logged user must be equal to id from url)
-    @GetMapping(value ="/{id}/memories", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Optional<List<Memory>> getCreatorsMemories(@PathVariable Integer id){
-        return postService.findMemoriesByCreator(id);
+    @PreAuthorize("#id == authentication.principal.user.id")
+    @GetMapping("/{id}/memories")
+    public ResponseEntity<List<Memory>> getCreatorsMemories(@PathVariable Integer id) {
+        List<Memory> memories = postService.findMemoriesByCreator(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Memories not found"));
+        return ResponseEntity.ok(memories);
     }
 
-    // TO DO: PreAuthorization based on login implementation (id of the currently logged user must be equal to id from url)
-    @GetMapping(value ="/{id}/capsules", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Optional<List<Capsule>> getCreatorsCapsules(@PathVariable Integer id){
-        return postService.findOpenCapsulesByCreator(id);
+    @PreAuthorize("#id == authentication.principal.user.id")
+    @GetMapping("/{id}/capsules")
+    public ResponseEntity<List<Capsule>> getCreatorsCapsules(@PathVariable Integer id) {
+        List<Capsule> capsules = postService.findOpenCapsulesByCreator(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Capsules not found"));
+        return ResponseEntity.ok(capsules);
     }
 
-    // TO DO: PreAuthorization based on login implementation (id of the currently logged user must be equal to id from url)
-    @GetMapping(value ="/{id}/all", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Optional<List<Post>> getAllCreatorsPosts(@PathVariable Integer id){
-        return postService.findAllByCreator(id);
+    @PreAuthorize("#id == authentication.principal.user.id")
+    @GetMapping("/{id}/all")
+    public ResponseEntity<List<Post>> getAllCreatorsPosts(@PathVariable Integer id) {
+        List<Post> posts = postService.findAllByCreator(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Posts not found"));
+        return ResponseEntity.ok(posts);
     }
 
     /*
@@ -51,21 +60,37 @@ public class PostController {
     }
      */
 
-    @PreAuthorize("(!#post.postCreator.id == id)")
-    @PostMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void createPost(@PathVariable Integer id, @RequestBody Post post){
+    @PreAuthorize("#id == authentication.principal.user.id")
+    @PostMapping("/{id}/memory")
+    public ResponseEntity<Void> createMemory(@PathVariable Integer id, @RequestBody Memory post) {
+        if (!post.getPostCreator().getId().equals(id)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You cannot allow to create a post.");
+        }
         postService.create(post);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PreAuthorize("(!#post.postCreator.id == id)")
-    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Post updatePost(@PathVariable Integer id, @RequestBody Post post){
-        return postService.update(post);
+    @PreAuthorize("#id == authentication.principal.user.id")
+    @PostMapping("/{id}/capsule")
+    public ResponseEntity<Void> createCapsule(@PathVariable Integer id, @RequestBody Capsule post) {
+        if (!post.getPostCreator().getId().equals(id)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You cannot allow to create a post.");
+        }
+        postService.create(post);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PreAuthorize("(!#post.postCreator.id == id)")
-    @DeleteMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void remove(@PathVariable Integer id, @RequestBody Post post){
+    @PreAuthorize("#post.postCreator.id == #id")
+    @PutMapping("/{id}")
+    public ResponseEntity<Post> updatePost(@PathVariable Integer id, @RequestBody Post post) {
+        Post updatedPost = postService.update(post);
+        return ResponseEntity.ok(updatedPost);
+    }
+
+    @PreAuthorize("#post.postCreator.id == #id")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> remove(@PathVariable Integer id, @RequestBody Post post) {
         postService.remove(post);
+        return ResponseEntity.noContent().build();
     }
 }
