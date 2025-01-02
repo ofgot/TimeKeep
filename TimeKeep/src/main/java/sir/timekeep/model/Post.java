@@ -35,8 +35,6 @@ public abstract class Post extends AbstractEntity {
     private Group group;
 
     // constructors
-    public Post() {
-    }
 
     public Post(String name, String description, User postCreator, List<Media> media, Group group) {
         this.name = name;
@@ -45,6 +43,10 @@ public abstract class Post extends AbstractEntity {
         this.postCreator = postCreator;
         this.media = media;
         this.group = group;
+    }
+
+    public Post() {
+
     }
 
     // getters

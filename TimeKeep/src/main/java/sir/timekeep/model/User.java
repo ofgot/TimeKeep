@@ -8,7 +8,8 @@ import java.util.List;
 @Entity
 @Table(name = "MEMO_USER")
 @NamedQueries({
-        @NamedQuery(name = "User.findByUsername", query = "SELECT u FROM User u WHERE u.username = :username")
+        @NamedQuery(name = "User.findByUsername", query = "SELECT u FROM User u WHERE u.username = :username"),
+        @NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u WHERE u.email = :email")
 })
 public class User extends AbstractEntity {
 
@@ -51,7 +52,9 @@ public class User extends AbstractEntity {
     @OneToMany(mappedBy = "postCreator")
     private List<Post> posts;
 
-    public User() {}
+    public User() {
+        this.role = Role.USUAL;
+    }
 
     public User(String name, String surname, String username, String email, String password) {
         this.name = name;

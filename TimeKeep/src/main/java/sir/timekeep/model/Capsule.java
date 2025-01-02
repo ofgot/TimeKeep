@@ -19,7 +19,10 @@ public class Capsule extends Post{
     private boolean isOpen;
 
     // constructors
-    public Capsule(){}
+    public Capsule(){
+        super();
+        this.setDateOfCreation(LocalDateTime.now());
+    }
 
     public Capsule(String name, String description, List<Media> media, User postCreator, Group group, LocalDateTime timeOfOpening) {
         super(name, description, postCreator, media, group);
