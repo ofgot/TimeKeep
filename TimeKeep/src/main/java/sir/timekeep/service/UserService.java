@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import sir.timekeep.dao.GroupDao;
 import sir.timekeep.dao.UserDao;
 import sir.timekeep.exception.UserNotAllowedException;
+import sir.timekeep.exception.ValidationException;
 import sir.timekeep.model.Group;
 import sir.timekeep.model.User;
 import sir.timekeep.util.Constants;
@@ -19,7 +20,6 @@ public class UserService {
     private final UserDao userDao;
     private final PasswordEncoder passwordEncoder;
     private final GroupDao groupDao;
-    final User currentUser = new User(); // need change latter
 
     @Autowired
     public UserService(UserDao userDao, PasswordEncoder passwordEncoder, GroupDao groupDao) {
@@ -31,16 +31,31 @@ public class UserService {
     @Transactional
     public void persist(User user) {
         Objects.requireNonNull(user);
-        user.encodePassword(passwordEncoder);
+
+        if (userDao.findByUsername(user.getUsername()).isPresent()) {
+            throw new ValidationException("User with this username already exists");
+        }
+
+        if (userDao.findByEmail(user.getEmail()).isPresent()) {
+            throw new UserNotAllowedException("User with this email already exists");
+        }
+
         if (user.getRole() == null) {
             user.setRole(Constants.DEFAULT_ROLE);
         }
+
+        user.encodePassword(passwordEncoder);
         userDao.persist(user);
     }
 
     @Transactional(readOnly = true)
     public boolean exists(String username) {
         return userDao.findByUsername(username).isPresent();
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<User> findByUsername(String username) {
+        return userDao.findByUsername(username);
     }
 
     @Transactional
