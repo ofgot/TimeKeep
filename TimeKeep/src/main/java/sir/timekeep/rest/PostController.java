@@ -1,5 +1,6 @@
 package sir.timekeep.rest;
 
+import jakarta.persistence.OrderBy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,5 +93,19 @@ public class PostController {
     public ResponseEntity<Void> remove(@PathVariable Integer id, @RequestBody Post post) {
         postService.remove(post);
         return ResponseEntity.noContent().build();
+    }
+
+    @PreAuthorize("(#memory.postCreator.id == #id) && (#id == authentication.principal.user.id)")
+    @DeleteMapping("/{id}/memory")
+    public ResponseEntity<Void> removeMemory(@PathVariable Integer id, @RequestBody Memory memory) {
+        postService.remove(memory);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PreAuthorize("(#memory.postCreator.id == #id) && (#id == authentication.principal.user.id)")
+    @PutMapping("/{id}/memory")
+    public ResponseEntity<Post> updateMemory(@PathVariable Integer id, @RequestBody Memory memory) {
+        Post updatedMemory = postService.update(memory);
+        return ResponseEntity.ok(updatedMemory);
     }
 }

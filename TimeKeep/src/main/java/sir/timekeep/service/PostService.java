@@ -1,5 +1,6 @@
 package sir.timekeep.service;
 
+import jakarta.persistence.OrderBy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,12 +25,14 @@ public class PostService {
         this.memoryDao = memoryDao;
         this.capsuleDao = capsuleDao;
     }
-        
+
+    @OrderBy("name ASC")
     @Transactional(readOnly = true)
     public Optional<List<Memory>> findMemoriesByCreator(Integer creatorId) {
         return memoryDao.findAllByCreator(creatorId);
     }
 
+    @OrderBy("name ASC")
     @Transactional(readOnly = true)
     public Optional<List<Capsule>> findOpenCapsulesByCreator(Integer creatorId) {
         return capsuleDao.findAllWhereCreatorIdCapsuleOpen(creatorId);
