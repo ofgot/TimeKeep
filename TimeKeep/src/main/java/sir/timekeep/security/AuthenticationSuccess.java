@@ -22,6 +22,11 @@ public class AuthenticationSuccess implements AuthenticationSuccessHandler, Logo
     @Override
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
                                         Authentication authentication) throws IOException {
+        if (authentication != null) {
+            System.out.println("Authentication successful for user: " + authentication.getName());
+        } else {
+            System.out.println("Authentication object is null!");
+        }
         final String username = getUsername(authentication);
 
         final LoginStatus loginStatus = new LoginStatus(true, authentication.isAuthenticated(), username, null);
