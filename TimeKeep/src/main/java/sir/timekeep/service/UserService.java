@@ -10,7 +10,6 @@ import sir.timekeep.dao.UserDao;
 import sir.timekeep.exception.UserNotAllowedException;
 import sir.timekeep.exception.ValidationException;
 import sir.timekeep.model.Group;
-import sir.timekeep.model.Post;
 import sir.timekeep.model.Role;
 import sir.timekeep.model.User;
 import sir.timekeep.util.Constants;

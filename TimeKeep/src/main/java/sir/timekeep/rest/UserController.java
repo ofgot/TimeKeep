@@ -27,7 +27,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/register")
+    @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> registerUser(@RequestBody User user) {
         userService.persist(user);
         LOG.debug("User {} successfully registered.", user);
@@ -41,8 +41,8 @@ public class UserController {
         return ((UserDetails) auth.getPrincipal()).getUser();
     }
 
-    @PreAuthorize("(#id == authentication.principal.user.id)")
-    @PutMapping("/{id}/changeRole")
+    @PreAuthorize("!anonymous")
+    @PutMapping("/users/{id}/changeRole")
     public ResponseEntity<Void> changeUserRole(@PathVariable Integer id) {
         userService.changeUserToPremium(id);
         return ResponseEntity.ok().build();
