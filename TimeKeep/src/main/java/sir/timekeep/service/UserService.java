@@ -9,6 +9,7 @@ import sir.timekeep.dao.UserDao;
 import sir.timekeep.exception.UserNotAllowedException;
 import sir.timekeep.exception.ValidationException;
 import sir.timekeep.model.Group;
+import sir.timekeep.model.Post;
 import sir.timekeep.model.User;
 import sir.timekeep.util.Constants;
 
@@ -51,6 +52,11 @@ public class UserService {
     @Transactional(readOnly = true)
     public boolean exists(String username) {
         return userDao.findByUsername(username).isPresent();
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<User> find(Integer id) {
+        return Optional.of(userDao.find(id));
     }
 
     @Transactional(readOnly = true)
