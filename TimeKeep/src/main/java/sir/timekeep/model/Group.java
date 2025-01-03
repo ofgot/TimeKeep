@@ -12,6 +12,7 @@ public class Group extends AbstractEntity {
     private String name;
 
     @ManyToMany(mappedBy = "groups")
+    //@JoinColumn(name = "user_id")
     private List<User> users;
 
     @ManyToOne
