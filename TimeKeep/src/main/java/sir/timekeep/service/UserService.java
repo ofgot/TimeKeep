@@ -1,5 +1,6 @@
 package sir.timekeep.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import sir.timekeep.exception.UserNotAllowedException;
 import sir.timekeep.exception.ValidationException;
 import sir.timekeep.model.Group;
 import sir.timekeep.model.Post;
+import sir.timekeep.model.Role;
 import sir.timekeep.model.User;
 import sir.timekeep.util.Constants;
 
@@ -62,6 +64,14 @@ public class UserService {
     @Transactional(readOnly = true)
     public Optional<User> findByUsername(String username) {
         return userDao.findByUsername(username);
+    }
+
+    @Transactional
+    public void changeUserToPremium(Integer id) {
+        User user = Optional.ofNullable(userDao.find(id))
+                .orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + id));
+        user.setRole(Role.PREMIUM);
+        userDao.update(user);
     }
 
     @Transactional

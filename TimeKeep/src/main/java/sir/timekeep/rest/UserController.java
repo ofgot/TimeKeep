@@ -40,4 +40,10 @@ public class UserController {
         return ((UserDetails) auth.getPrincipal()).getUser();
     }
 
+    @PutMapping("/users/{id}/changeRole")
+    public ResponseEntity<Void> changeUserRole(@PathVariable Integer id) {
+        userService.changeUserToPremium(id);
+        return ResponseEntity.ok().build();
+    }
+
 }

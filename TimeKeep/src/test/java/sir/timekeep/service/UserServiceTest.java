@@ -160,4 +160,15 @@ public class UserServiceTest {
         assertEquals(gr.getUsers().size(), 1);
         assertTrue(gr.getUsers().contains(usualUser));
     }
+
+    @Test
+    public void changeUserRole() {
+        User user = Generator.generateUser();
+        user.setRole(Role.USUAL);
+        em.persist(user);
+
+        sut.changeUserToPremium(user.getId());
+
+        assertEquals(user.getRole(), Role.PREMIUM);
+    }
 }
