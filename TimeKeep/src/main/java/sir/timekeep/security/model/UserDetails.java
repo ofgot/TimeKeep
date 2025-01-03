@@ -6,6 +6,9 @@ import sir.timekeep.model.User;
 
 import java.util.*;
 
+/**
+ * Custom user details implementation provides access to e-shop {@link User}.
+ */
 public class UserDetails implements org.springframework.security.core.userdetails.UserDetails {
 
     private final User user;
@@ -17,6 +20,15 @@ public class UserDetails implements org.springframework.security.core.userdetail
         this.user = user;
         this.authorities = new HashSet<>();
         addUserRole();
+    }
+
+    public UserDetails(User user, Collection<GrantedAuthority> authorities) {
+        Objects.requireNonNull(user);
+        Objects.requireNonNull(authorities);
+        this.user = user;
+        this.authorities = new HashSet<>();
+        addUserRole();
+        this.authorities.addAll(authorities);
     }
 
     private void addUserRole() {
