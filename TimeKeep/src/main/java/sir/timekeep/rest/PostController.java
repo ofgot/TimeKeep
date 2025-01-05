@@ -1,7 +1,5 @@
 package sir.timekeep.rest;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -62,7 +60,7 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    // works but there is a problem
+    // works
     @PreAuthorize("!anonymous && (hasRole('USUAL') || hasRole('PREMIUM'))")
     @PutMapping("/{id}/memory")
     public ResponseEntity<Post> updateMemory(@PathVariable Integer id, @RequestBody Memory memory) {
@@ -81,6 +79,7 @@ public class PostController {
         return ResponseEntity.ok(updatedMemory);
     }
 
+    //works
     @PreAuthorize("!anonymous && (hasRole('USUAL') || hasRole('PREMIUM'))")
     @PostMapping("/{id}/capsule")
     public ResponseEntity<Void> createCapsule(@PathVariable Integer id, @RequestBody Capsule post) {
@@ -92,15 +91,8 @@ public class PostController {
     }
 
     @PreAuthorize("!anonymous && (hasRole('USUAL') || hasRole('PREMIUM'))")
-    @PutMapping("/{id}")
-    public ResponseEntity<Post> updatePost(@PathVariable Integer id, @RequestBody Post post) {
-        Post updatedPost = postService.update(post);
-        return ResponseEntity.ok(updatedPost);
-    }
-
-    @PreAuthorize("!anonymous && (hasRole('USUAL') || hasRole('PREMIUM'))")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> remove(@PathVariable Integer id, @RequestBody Post post) {
+    public ResponseEntity<Void> removeCapsule(@PathVariable Integer id, @RequestBody Post post) {
         postService.remove(post);
         return ResponseEntity.noContent().build();
     }
