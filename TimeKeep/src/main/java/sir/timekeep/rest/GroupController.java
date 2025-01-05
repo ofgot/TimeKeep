@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import sir.timekeep.exception.AlreadyTakenException;
 import sir.timekeep.model.Group;
 import sir.timekeep.model.User;
 import sir.timekeep.responseClasses.ResponseGroup;
@@ -55,30 +56,28 @@ public class GroupController {
     }
 
     @PreAuthorize("!anonymous && hasRole('PREMIUM')")
-    @PutMapping(value = "/{user_id}/groups/{group_id}/add_user", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> addUserToGroup(@PathVariable Integer user_id, @PathVariable Integer group_id, @RequestBody User user){
-        Objects.requireNonNull(user);
-        if (!groupService.exists(group_id) || userService.find(user_id).isEmpty()){
+    @PutMapping(value = "/{user_id}/groups/{group_id}/add_user/{add_id}")
+    public ResponseEntity<Void> addUserToGroup(@PathVariable Integer user_id, @PathVariable Integer group_id, @PathVariable Integer add_id){
+        if (!groupService.exists(group_id) || userService.find(user_id).isEmpty() || userService.find(add_id).isEmpty()){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         if (!Objects.equals(user_id, groupService.find(group_id).get().getGroupCreator().getId())){
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
-        userService.addUserToGroup(userService.find(user_id).get(), groupService.find(group_id).get(), user);
+        userService.addUserToGroup(userService.find(user_id).get(), groupService.find(group_id).get(), userService.find(add_id).get());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PreAuthorize("!anonymous && hasRole('PREMIUM')")
-    @PutMapping(value = "/{user_id}/groups/{group_id}/remove_user", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> removeUserFromGroup(@PathVariable Integer user_id, @PathVariable Integer group_id, @RequestBody User user){
-        Objects.requireNonNull(user);
-        if (!groupService.exists(group_id) || userService.find(user_id).isEmpty()){
+    @PutMapping(value = "/{user_id}/groups/{group_id}/remove_user/{remove_id}")
+    public ResponseEntity<Void> removeUserFromGroup(@PathVariable Integer user_id, @PathVariable Integer group_id, @PathVariable Integer remove_id){
+        if (!groupService.exists(group_id) || userService.find(user_id).isEmpty() || userService.find(remove_id).isEmpty()){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         if (!Objects.equals(user_id, groupService.find(group_id).get().getGroupCreator().getId())){
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
-        userService.removeUserFromGroup(userService.find(user_id).get(), groupService.find(group_id).get(), user);
+        userService.removeUserFromGroup(userService.find(user_id).get(), groupService.find(group_id).get(), userService.find(remove_id).get());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
