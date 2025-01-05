@@ -1,6 +1,5 @@
 package sir.timekeep.rest;
 
-import org.apache.coyote.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -17,7 +16,6 @@ import sir.timekeep.service.UserService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/rest")
@@ -31,7 +29,7 @@ public class GroupController {
         this.userService = userService;
     }
 
-    @PreAuthorize("(#id == authentication.principal.user.id)")
+    @PreAuthorize("!anonymous && (hasRole('USUAL') || hasRole('PREMIUM'))")
     @GetMapping(value ="/{id}/groups", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<ResponseGroup>> findUsersGroups(@PathVariable Integer id){
         if (userService.find(id).isEmpty()){
@@ -48,7 +46,7 @@ public class GroupController {
         return ResponseEntity.ok(responseGroups);
     }
 
-    @PreAuthorize("hasRole('PREMIUM') && (#id == authentication.principal.user.id)")
+    @PreAuthorize("!anonymous && hasRole('PREMIUM')")
     @PostMapping(value = "/{id}/groups", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> createGroup(@PathVariable Integer id, @RequestBody Group group){
         Objects.requireNonNull(group);
@@ -56,7 +54,7 @@ public class GroupController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasRole('PREMIUM') && (#user_id == authentication.principal.user.id)")
+    @PreAuthorize("!anonymous && hasRole('PREMIUM')")
     @PutMapping(value = "/{user_id}/groups/{group_id}/add_user", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> addUserToGroup(@PathVariable Integer user_id, @PathVariable Integer group_id, @RequestBody User user){
         Objects.requireNonNull(user);
@@ -70,7 +68,7 @@ public class GroupController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('PREMIUM') && (#user_id == authentication.principal.user.id)")
+    @PreAuthorize("!anonymous && hasRole('PREMIUM')")
     @PutMapping(value = "/{user_id}/groups/{group_id}/remove_user", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> removeUserFromGroup(@PathVariable Integer user_id, @PathVariable Integer group_id, @RequestBody User user){
         Objects.requireNonNull(user);
@@ -98,7 +96,7 @@ public class GroupController {
         userService.removeUserFromGroup(creator, group, creator);
     }
 
-    @PreAuthorize("hasRole('PREMIUM') && (#user_id == authentication.principal.user.id)")
+    @PreAuthorize("!anonymous && hasRole('PREMIUM')")
     @DeleteMapping(value = "/{user_id}/groups/{group_id}")
     public ResponseEntity<Void> deleteGroup(@PathVariable Integer user_id, @PathVariable Integer group_id){
         if (groupService.find(group_id).isEmpty()){

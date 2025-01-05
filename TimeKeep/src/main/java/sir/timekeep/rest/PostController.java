@@ -27,7 +27,7 @@ public class PostController {
         this.postService = postService;
     }
 
-    @PreAuthorize("#id == authentication.principal.user.id")
+    @PreAuthorize("!anonymous && (hasRole('USUAL') || hasRole('PREMIUM'))")
     @GetMapping("/{id}/memories")
     public ResponseEntity<List<Memory>> getCreatorsMemories(@PathVariable Integer id) {
         List<Memory> memories = postService.findMemoriesByCreator(id)
@@ -35,7 +35,7 @@ public class PostController {
         return ResponseEntity.ok(memories);
     }
 
-    @PreAuthorize("#id == authentication.principal.user.id")
+    @PreAuthorize("!anonymous && (hasRole('USUAL') || hasRole('PREMIUM'))")
     @GetMapping("/{id}/capsules")
     public ResponseEntity<List<Capsule>> getCreatorsCapsules(@PathVariable Integer id) {
         List<Capsule> capsules = postService.findOpenCapsulesByCreator(id)
@@ -43,7 +43,7 @@ public class PostController {
         return ResponseEntity.ok(capsules);
     }
 
-    @PreAuthorize("#id == authentication.principal.user.id")
+    @PreAuthorize("!anonymous && (hasRole('USUAL') || hasRole('PREMIUM'))")
     @GetMapping("/{id}/all")
     public ResponseEntity<List<Post>> getAllCreatorsPosts(@PathVariable Integer id) {
         List<Post> posts = postService.findAllByCreator(id)
@@ -51,7 +51,7 @@ public class PostController {
         return ResponseEntity.ok(posts);
     }
 
-    @PreAuthorize("#id == authentication.principal.user.id")
+    @PreAuthorize("!anonymous && (hasRole('USUAL') || hasRole('PREMIUM'))")
     @PostMapping(value = "/{id}/memory", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> createMemory(@PathVariable Integer id, @RequestBody Memory post) {
         if (!post.getPostCreator().getId().equals(id)) {
@@ -61,7 +61,7 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PreAuthorize("#id == authentication.principal.user.id")
+    @PreAuthorize("!anonymous && (hasRole('USUAL') || hasRole('PREMIUM'))")
     @PostMapping("/{id}/capsule")
     public ResponseEntity<Void> createCapsule(@PathVariable Integer id, @RequestBody Capsule post) {
         if (!post.getPostCreator().getId().equals(id)) {
@@ -71,28 +71,28 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PreAuthorize("#post.postCreator.id == #id")
+    @PreAuthorize("!anonymous && (hasRole('USUAL') || hasRole('PREMIUM'))")
     @PutMapping("/{id}")
     public ResponseEntity<Post> updatePost(@PathVariable Integer id, @RequestBody Post post) {
         Post updatedPost = postService.update(post);
         return ResponseEntity.ok(updatedPost);
     }
 
-    @PreAuthorize("#post.postCreator.id == #id")
+    @PreAuthorize("!anonymous && (hasRole('USUAL') || hasRole('PREMIUM'))")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> remove(@PathVariable Integer id, @RequestBody Post post) {
         postService.remove(post);
         return ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("(#memory.postCreator.id == #id) && (#id == authentication.principal.user.id)")
+    @PreAuthorize("!anonymous && (hasRole('USUAL') || hasRole('PREMIUM'))")
     @DeleteMapping("/{id}/memory")
     public ResponseEntity<Void> removeMemory(@PathVariable Integer id, @RequestBody Memory memory) {
         postService.remove(memory);
         return ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("(#memory.postCreator.id == #id) && (#id == authentication.principal.user.id)")
+    @PreAuthorize("!anonymous && (hasRole('USUAL') || hasRole('PREMIUM'))")
     @PutMapping("/{id}/memory")
     public ResponseEntity<Post> updateMemory(@PathVariable Integer id, @RequestBody Memory memory) {
         Post updatedMemory = postService.update(memory);
