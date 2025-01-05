@@ -41,7 +41,7 @@ public class UserController {
         return ((UserDetails) auth.getPrincipal()).getUser();
     }
 
-    @PreAuthorize("!anonymous")
+    @PreAuthorize("hasRole('USUAL') && !anonymous")
     @PutMapping("/users/{id}/changeRole")
     public ResponseEntity<Void> changeUserRole(@PathVariable Integer id) {
         userService.changeUserToPremium(id);
