@@ -29,14 +29,10 @@ public class Capsule extends Post{
     public Capsule(String name, String description, List<Media> media, User postCreator, Group group, LocalDateTime timeOfOpening) {
         super(name, description, postCreator, media, group);
         this.timeOfOpening = timeOfOpening;
-        this.isOpen = false;
+        this.isOpen = !this.timeOfOpening.isAfter(LocalDateTime.now());
     }
 
     //getters
-    public boolean getIsOpen() {
-        return isOpen;
-    }
-
     public LocalDateTime getTimeOfOpening() {
         return timeOfOpening;
     }
@@ -48,6 +44,23 @@ public class Capsule extends Post{
     public void setTimeOfOpening(LocalDateTime timeOfOpening) {
         this.timeOfOpening = timeOfOpening;
     }
+
+    // This the only time, when we get to isOpen
+    public boolean getIsOpen() {
+        this.isOpen = !this.timeOfOpening.isAfter(LocalDateTime.now());
+        return isOpen;
+    }
+
+    // I tried Scheduled, but it didn't work, because cron apparently cannot take variables, that are not known during compilation
+    /*
+    public String getCronExpressionFromTime(LocalDateTime time) {
+        return String.format("0 %d %d %d * * *", time.getMinute(), time.getHour(), time.getDayOfMonth());
+    }
+    @Scheduled(cron = "#{T(sir.timekeep.model.Capsule).getCronExpressionFromTime('(sir.timekeep.model.Capsule).timeOfOpening')}")
+    public void setIsOpen(){
+        this.isOpen = true;
+    }
+     */
 
     //extra
     @Override
