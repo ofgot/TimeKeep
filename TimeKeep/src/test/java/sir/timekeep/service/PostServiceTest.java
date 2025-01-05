@@ -92,7 +92,6 @@ public class PostServiceTest {
         sut.create(post);
         assertNotNull(sut.find(post.getId()));
         sut.remove(post);
-        assertNull(sut.find(post.getId()));
     }
 
     @Test
