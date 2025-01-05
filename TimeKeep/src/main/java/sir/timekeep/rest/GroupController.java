@@ -1,5 +1,6 @@
 package sir.timekeep.rest;
 
+import org.apache.coyote.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -8,10 +9,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import sir.timekeep.model.Group;
 import sir.timekeep.model.User;
+import sir.timekeep.responseClasses.ResponseGroup;
 import sir.timekeep.service.GroupService;
 import org.springframework.http.ResponseEntity;
 import sir.timekeep.service.UserService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -28,11 +31,21 @@ public class GroupController {
         this.userService = userService;
     }
 
-    @PreAuthorize("hasRole('PREMIUM') && (#id == authentication.principal.user.id)")
+    @PreAuthorize("(#id == authentication.principal.user.id)")
     @GetMapping(value ="/{id}/groups", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Group>> findByCreator(@PathVariable Integer id){
-        Optional<List<Group>> groups = groupService.findAllByCreator(id);
-        return groups.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<List<ResponseGroup>> findUsersGroups(@PathVariable Integer id){
+        if (userService.find(id).isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        User user = userService.find(id).get();
+        List<Group> groups = user.getGroups();
+        List<ResponseGroup> responseGroups = new ArrayList<>();
+        for (Group group : groups){
+            ResponseGroup tmpGroup = new ResponseGroup(group);
+            responseGroups.add(tmpGroup);
+        }
+        System.out.println(responseGroups);
+        return ResponseEntity.ok(responseGroups);
     }
 
     @PreAuthorize("hasRole('PREMIUM') && (#id == authentication.principal.user.id)")
@@ -53,9 +66,6 @@ public class GroupController {
         if (!Objects.equals(user_id, groupService.find(group_id).get().getGroupCreator().getId())){
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
-        if (groupService.find(group_id).get().getUsers().contains(user)){
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
-        }
         userService.addUserToGroup(userService.find(user_id).get(), groupService.find(group_id).get(), user);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -70,25 +80,36 @@ public class GroupController {
         if (!Objects.equals(user_id, groupService.find(group_id).get().getGroupCreator().getId())){
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
-        if (!groupService.find(group_id).get().getUsers().contains(user)){
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
-        }
         userService.removeUserFromGroup(userService.find(user_id).get(), groupService.find(group_id).get(), user);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    private void deleteAllMembersGroup(int user_id, Group group){
+        if (userService.findAll().isEmpty() || userService.find(user_id).isEmpty()){
+            return;
+        }
+        User creator = userService.find(user_id).get();
+        List<User> users = userService.findAll().get();
+        for (User user : users){
+            if (!user.equals(creator)){
+                userService.removeUserFromGroup(creator, group, user);
+            }
+        }
+        userService.removeUserFromGroup(creator, group, creator);
     }
 
     @PreAuthorize("hasRole('PREMIUM') && (#user_id == authentication.principal.user.id)")
     @DeleteMapping(value = "/{user_id}/groups/{group_id}")
     public ResponseEntity<Void> deleteGroup(@PathVariable Integer user_id, @PathVariable Integer group_id){
-        Optional<Group> group = groupService.find(group_id);
-        if (group.isPresent()){
-            if (!Objects.equals(user_id, group.get().getGroupCreator().getId())){
-                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-            }
-            groupService.remove(group.get());
-            return new ResponseEntity<>(ResponseEntity.ok().build().getStatusCode());
-        } else{
+        if (groupService.find(group_id).isEmpty()){
             return new ResponseEntity<>(ResponseEntity.notFound().build().getStatusCode());
         }
+        Group group = groupService.find(group_id).get();
+        if (!Objects.equals(user_id, group.getGroupCreator().getId())){
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        deleteAllMembersGroup(user_id, group);
+        groupService.remove(group);
+        return new ResponseEntity<>(ResponseEntity.ok().build().getStatusCode());
     }
 }
