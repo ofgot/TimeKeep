@@ -9,6 +9,9 @@ import sir.timekeep.model.User;
 
 import java.util.Optional;
 
+/**
+ * Custom user details service implementation ensures security works with our UserDetails implementation.
+ */
 @Service
 public class UserDetailsService implements org.springframework.security.core.userdetails.UserDetailsService {
 
@@ -21,10 +24,9 @@ public class UserDetailsService implements org.springframework.security.core.use
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        final Optional<User> user = userDao.findByUsername(username);
-        if (user.isEmpty()) {
-            throw new UsernameNotFoundException("User with username " + username + " not found.");
-        }
-        return new sir.timekeep.security.model.UserDetails(user.get());
+        User user = userDao.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User with username " + username + " not found."));
+
+        return new sir.timekeep.security.model.UserDetails(user);
     }
 }

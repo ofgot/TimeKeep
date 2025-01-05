@@ -3,7 +3,9 @@ package sir.timekeep.model;
 import jakarta.persistence.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "MEMO_USER")
@@ -102,6 +104,50 @@ public class User extends AbstractEntity {
     public void setCreatedGroups(List<Group> createdGroups) {this.createdGroups = createdGroups;}
 
     public void setPosts(List<Post> posts) {this.posts = posts;}
+
+    private boolean isInGroup(Group group){
+        for (Group tmpGroup : this.groups){
+            if (tmpGroup.getId().equals(group.getId())){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean deleteFromGroup(Group group){
+        int size = this.groups.size();
+        for (int i = 0; i < size; i++){
+            if (this.groups.get(i).getId().equals(group.getId())){
+                this.groups.remove(i);
+                System.out.println("Removed from this:" + this.groups);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean addToGroup(Group group){
+        if (this.groups == null){
+            this.groups = new ArrayList<>();
+        }
+        if (isInGroup(group)){
+            return false;
+        }
+        System.out.println("Before added to group:" + this.groups);
+        System.out.println("What should be added: " + group);
+        this.groups.add(group);
+        System.out.println("Added group:" + this.groups);   
+        return true;
+    }
+
+    public boolean removeFromGroup(Group group){
+        System.out.println("What has user:" + this.groups);
+        System.out.println("What should be removed: " + group);
+        if (this.groups == null){
+            return false;
+        }
+        return deleteFromGroup(group);
+    }
 
     // extra
     public void erasePassword() {
