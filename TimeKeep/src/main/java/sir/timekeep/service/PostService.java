@@ -86,4 +86,8 @@ public class PostService {
     public Memory findById(Integer id) {
         return memoryDao.find(id);
     }
+
+    public Post findPostById(Integer id){
+        return postDao.find(id);
+    }
 }
