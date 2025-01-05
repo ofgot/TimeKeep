@@ -67,7 +67,7 @@ public class PostController {
         if (!memory.getPostCreator().getId().equals(id)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You cannot update this memory.");
         }
-        Memory existingMemory = postService.findById(id);
+        Memory existingMemory = postService.findById(memory.getId());
         if (existingMemory == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Memory not found");
         }
