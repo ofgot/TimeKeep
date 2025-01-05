@@ -51,13 +51,6 @@ public class PostController {
         return ResponseEntity.ok(posts);
     }
 
-    /*
-    @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
-    private Optional<List<Post>> findAll(){
-        return postService.findAll();
-    }
-     */
-
     @PreAuthorize("#id == authentication.principal.user.id")
     @PostMapping(value = "/{id}/memory", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> createMemory(@PathVariable Integer id, @RequestBody Memory post) {

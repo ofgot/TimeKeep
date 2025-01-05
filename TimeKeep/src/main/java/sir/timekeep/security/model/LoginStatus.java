@@ -7,7 +7,8 @@ public class LoginStatus {
     private String errorMessage;
     private boolean success;
 
-    public LoginStatus() {}
+    public LoginStatus() {
+    }
 
     public LoginStatus(boolean loggedIn, boolean success, String username, String errorMessage) {
         this.loggedIn = loggedIn;

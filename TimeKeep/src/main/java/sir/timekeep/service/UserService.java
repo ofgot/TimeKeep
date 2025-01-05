@@ -1,14 +1,17 @@
 package sir.timekeep.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sir.timekeep.dao.GroupDao;
 import sir.timekeep.dao.UserDao;
+import sir.timekeep.exception.AlreadyTakenException;
 import sir.timekeep.exception.UserNotAllowedException;
 import sir.timekeep.exception.ValidationException;
 import sir.timekeep.model.Group;
+import sir.timekeep.model.Role;
 import sir.timekeep.model.User;
 import sir.timekeep.util.Constants;
 
@@ -54,8 +57,27 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
+    public Optional<User> find(Integer id) {
+        return Optional.of(userDao.find(id));
+    }
+
+    @Transactional(readOnly = true)
     public Optional<User> findByUsername(String username) {
         return userDao.findByUsername(username);
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<List<User>> findAll() {
+        return Optional.of(userDao.findAll());
+    }
+
+
+    @Transactional
+    public void changeUserToPremium(Integer id) {
+        User user = Optional.ofNullable(userDao.find(id))
+                .orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + id));
+        user.setRole(Role.PREMIUM);
+        userDao.update(user);
     }
 
     @Transactional
@@ -85,12 +107,10 @@ public class UserService {
     @Transactional
     public void addUserToGroup(User user, Group group, User userToAdd) {
         if (user.isPremium() && group.getGroupCreator().equals(user)) {
-            if (group.getUsers() == null) {
-                group.setUsers(new ArrayList<>());
+            if (!userToAdd.addToGroup(group)){
+                throw new AlreadyTakenException("User is already in group");
             }
-            if (!group.getUsers().contains(userToAdd)) {
-                group.addUser(userToAdd);
-            }
+            userDao.update(userToAdd);
         } else {
             throw new UserNotAllowedException(user + " is not allowed to add users to group");
         }
@@ -99,11 +119,10 @@ public class UserService {
     @Transactional
     public void removeUserFromGroup(User user, Group group, User userToRemove) {
         if (user.isPremium() && group.getGroupCreator().equals(user)) {
-            List<User> users = group.getUsers();
-            if (users != null && users.contains(userToRemove)) {
-                group.removeUser(userToRemove);
-                groupDao.update(group);
+            if (!userToRemove.removeFromGroup(group)){
+                throw new AlreadyTakenException("User is not in group");
             }
+            userDao.update(userToRemove);
         } else {
             throw new UserNotAllowedException(user + " is not allowed to remove users from group");
         }

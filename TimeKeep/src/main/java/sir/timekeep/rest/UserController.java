@@ -7,6 +7,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import sir.timekeep.rest.util.RestUtils;
@@ -26,7 +27,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/register")
+    @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> registerUser(@RequestBody User user) {
         userService.persist(user);
         LOG.debug("User {} successfully registered.", user);
@@ -38,6 +39,13 @@ public class UserController {
     public User getCurrent(Authentication auth) {
         assert auth.getPrincipal() instanceof UserDetails;
         return ((UserDetails) auth.getPrincipal()).getUser();
+    }
+
+    @PreAuthorize("!anonymous")
+    @PutMapping("/users/{id}/changeRole")
+    public ResponseEntity<Void> changeUserRole(@PathVariable Integer id) {
+        userService.changeUserToPremium(id);
+        return ResponseEntity.ok().build();
     }
 
 }
