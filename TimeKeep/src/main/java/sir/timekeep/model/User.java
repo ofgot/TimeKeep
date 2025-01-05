@@ -1,5 +1,6 @@
 package sir.timekeep.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -52,6 +53,7 @@ public class User extends AbstractEntity {
     private List<Group> createdGroups;
 
     @OneToMany(mappedBy = "postCreator")
+    @JsonManagedReference
     private List<Post> posts;
 
     public User() {

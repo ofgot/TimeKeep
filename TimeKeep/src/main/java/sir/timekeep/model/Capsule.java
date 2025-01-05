@@ -1,5 +1,6 @@
 package sir.timekeep.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -10,6 +11,7 @@ import java.util.List;
 @DiscriminatorValue("Capsule")
 public class Capsule extends Post{
 
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS")
     @Basic(optional = false)
     @Column(name="timeOfOpening", nullable = false)
     private LocalDateTime timeOfOpening;
@@ -34,6 +36,19 @@ public class Capsule extends Post{
     public boolean getIsOpen() {
         return isOpen;
     }
+
+    public LocalDateTime getTimeOfOpening() {
+        return timeOfOpening;
+    }
+
+    public boolean isOpen() {
+        return isOpen;
+    }
+
+    public void setTimeOfOpening(LocalDateTime timeOfOpening) {
+        this.timeOfOpening = timeOfOpening;
+    }
+
     //extra
     @Override
     public String toString() {

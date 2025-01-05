@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import static sir.timekeep.model.QMemory.memory;
+
 @Service
 public class PostService {
     private final PostDao postDao;
@@ -61,7 +63,10 @@ public class PostService {
 
     @Transactional
     public Post update(Post post) {
-        postDao.update(post);
+        Post existingPost = postDao.find(post.getId());
+        if (existingPost != null) {
+            postDao.update(post);
+        }
         return post;
     }
 
@@ -76,5 +81,13 @@ public class PostService {
     @Transactional(readOnly = true)
     public boolean exists(Integer id) {
         return postDao.exists(id);
+    }
+
+    public Memory findById(Integer id) {
+        return memoryDao.find(id);
+    }
+
+    public Post findPostById(Integer id){
+        return postDao.find(id);
     }
 }
