@@ -51,6 +51,7 @@ public class PostController {
         return ResponseEntity.ok(posts);
     }
 
+    // works
     @PreAuthorize("!anonymous && (hasRole('USUAL') || hasRole('PREMIUM'))")
     @PostMapping(value = "/{id}/memory", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> createMemory(@PathVariable Integer id, @RequestBody Memory post) {
@@ -59,6 +60,22 @@ public class PostController {
         }
         postService.create(post);
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    // works
+    @PreAuthorize("!anonymous && (hasRole('USUAL') || hasRole('PREMIUM'))")
+    @PutMapping("/{id}/memory")
+    public ResponseEntity<Post> updateMemory(@PathVariable Integer id, @RequestBody Memory memory) {
+        if (!memory.getPostCreator().getId().equals(id)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You cannot update this memory.");
+        }
+        Memory existingMemory = postService.findById(id);
+        if (existingMemory == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Memory not found");
+        }
+
+        Post updatedMemory = postService.update(memory);
+        return ResponseEntity.ok(updatedMemory);
     }
 
     @PreAuthorize("!anonymous && (hasRole('USUAL') || hasRole('PREMIUM'))")
@@ -92,10 +109,5 @@ public class PostController {
         return ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("!anonymous && (hasRole('USUAL') || hasRole('PREMIUM'))")
-    @PutMapping("/{id}/memory")
-    public ResponseEntity<Post> updateMemory(@PathVariable Integer id, @RequestBody Memory memory) {
-        Post updatedMemory = postService.update(memory);
-        return ResponseEntity.ok(updatedMemory);
-    }
+
 }
