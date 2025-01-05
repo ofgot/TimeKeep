@@ -62,7 +62,7 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    // works
+    // works but there is a problem
     @PreAuthorize("!anonymous && (hasRole('USUAL') || hasRole('PREMIUM'))")
     @PutMapping("/{id}/memory")
     public ResponseEntity<Post> updateMemory(@PathVariable Integer id, @RequestBody Memory memory) {
@@ -74,7 +74,10 @@ public class PostController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Memory not found");
         }
 
-        Post updatedMemory = postService.update(memory);
+        existingMemory.setName(memory.getName());
+        existingMemory.setDescription(memory.getDescription());
+
+        Post updatedMemory = postService.update(existingMemory);
         return ResponseEntity.ok(updatedMemory);
     }
 
