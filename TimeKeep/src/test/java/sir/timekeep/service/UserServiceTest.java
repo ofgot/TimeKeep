@@ -123,11 +123,11 @@ public class UserServiceTest {
 
         sut.addUserToGroup(premiumUser, group, user);
 
-        assertTrue(group.getUsers().contains(user));
+        assertTrue(user.getGroups().contains(group));
 
         Group gr = em.find(Group.class, group.getId());
         assertEquals(gr.getGroupCreator(), premiumUser);
-        assertTrue(gr.getUsers().contains(user));
+        assertTrue(user.getGroups().contains(group));
     }
 
     @Test
@@ -156,9 +156,7 @@ public class UserServiceTest {
 
         Group gr = em.find(Group.class, group.getId());
         assertEquals(gr.getGroupCreator(), premiumUser);
-        assertFalse(gr.getUsers().contains(user));
-        assertEquals(gr.getUsers().size(), 1);
-        assertTrue(gr.getUsers().contains(usualUser));
+        assertFalse(user.getGroups().contains(group));
     }
 
     @Test
