@@ -1,7 +1,5 @@
 package sir.timekeep.rest;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -51,6 +49,7 @@ public class PostController {
         return ResponseEntity.ok(posts);
     }
 
+    // works
     @PreAuthorize("!anonymous && (hasRole('USUAL') || hasRole('PREMIUM'))")
     @PostMapping(value = "/{id}/memory", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> createMemory(@PathVariable Integer id, @RequestBody Memory post) {
@@ -61,6 +60,26 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    // works
+    @PreAuthorize("!anonymous && (hasRole('USUAL') || hasRole('PREMIUM'))")
+    @PutMapping("/{id}/memory")
+    public ResponseEntity<Post> updateMemory(@PathVariable Integer id, @RequestBody Memory memory) {
+        if (!memory.getPostCreator().getId().equals(id)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You cannot update this memory.");
+        }
+        Memory existingMemory = postService.findById(id);
+        if (existingMemory == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Memory not found");
+        }
+
+        existingMemory.setName(memory.getName());
+        existingMemory.setDescription(memory.getDescription());
+
+        Post updatedMemory = postService.update(existingMemory);
+        return ResponseEntity.ok(updatedMemory);
+    }
+
+    //works
     @PreAuthorize("!anonymous && (hasRole('USUAL') || hasRole('PREMIUM'))")
     @PostMapping("/{id}/capsule")
     public ResponseEntity<Void> createCapsule(@PathVariable Integer id, @RequestBody Capsule post) {
@@ -71,31 +90,18 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    //works
     @PreAuthorize("!anonymous && (hasRole('USUAL') || hasRole('PREMIUM'))")
-    @PutMapping("/{id}")
-    public ResponseEntity<Post> updatePost(@PathVariable Integer id, @RequestBody Post post) {
-        Post updatedPost = postService.update(post);
-        return ResponseEntity.ok(updatedPost);
-    }
+    @DeleteMapping("/{id}/delete")
+    public ResponseEntity<Void> removePost(@PathVariable Integer id) {
+        Post post = postService.findPostById(id);
 
-    @PreAuthorize("!anonymous && (hasRole('USUAL') || hasRole('PREMIUM'))")
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> remove(@PathVariable Integer id, @RequestBody Post post) {
+        if (post == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Post not found");
+        }
+
         postService.remove(post);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
-    @PreAuthorize("!anonymous && (hasRole('USUAL') || hasRole('PREMIUM'))")
-    @DeleteMapping("/{id}/memory")
-    public ResponseEntity<Void> removeMemory(@PathVariable Integer id, @RequestBody Memory memory) {
-        postService.remove(memory);
-        return ResponseEntity.noContent().build();
-    }
-
-    @PreAuthorize("!anonymous && (hasRole('USUAL') || hasRole('PREMIUM'))")
-    @PutMapping("/{id}/memory")
-    public ResponseEntity<Post> updateMemory(@PathVariable Integer id, @RequestBody Memory memory) {
-        Post updatedMemory = postService.update(memory);
-        return ResponseEntity.ok(updatedMemory);
-    }
 }
