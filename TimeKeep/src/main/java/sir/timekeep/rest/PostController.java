@@ -90,19 +90,18 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    //works
     @PreAuthorize("!anonymous && (hasRole('USUAL') || hasRole('PREMIUM'))")
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> removeCapsule(@PathVariable Integer id, @RequestBody Post post) {
+    @DeleteMapping("/{id}/delete")
+    public ResponseEntity<Void> removePost(@PathVariable Integer id) {
+        Post post = postService.findPostById(id);
+
+        if (post == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Post not found");
+        }
+
         postService.remove(post);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
-
-    @PreAuthorize("!anonymous && (hasRole('USUAL') || hasRole('PREMIUM'))")
-    @DeleteMapping("/{id}/memory")
-    public ResponseEntity<Void> removeMemory(@PathVariable Integer id, @RequestBody Memory memory) {
-        postService.remove(memory);
-        return ResponseEntity.noContent().build();
-    }
-
 
 }
