@@ -1,6 +1,6 @@
 # 📌 Memo - Social Network for Preserving Memories & Time Capsules
 
-**Authors:** Daria Kuznetsova & Matěj Charousek  
+**Authors:** Daria Kuznetsova 
 
 ## 🌟 Overview
 **Memo** is a unique social network that allows users to **create, store, and share memories** in the form of **time capsules**. Capsules remain locked until a specified future date, ensuring special moments are preserved and revealed at just the right time.
