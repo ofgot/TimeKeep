@@ -11,3 +11,4 @@
 - 👥 **Group Capsules** – Collaborate with others to create shared memories.  
 - 🔒 **Private Groups** (Premium Feature) – Only premium users can create groups, invite members, and share exclusive content.
 
+![Uploading Screenshot 2025-03-02 at 13.52.30.png…]()
