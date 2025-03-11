@@ -3,7 +3,7 @@
 **Authors:** Daria Kuznetsova 
 
 ## 🌟 Overview
-**Memo** is a unique social network that allows users to **create, store, and share memories** in the form of **time capsules**. Capsules remain locked until a specified future date, ensuring special moments are preserved and revealed at just the right time.
+**Memo** is a unique social network that allows users to **create, store, and share memories** and create **time capsules**. Capsules remain locked until a specified future date, ensuring special moments are preserved and revealed at just the right time.
 
 ## ✨ Features
 - 🕰 **Time Capsules** – Lock memories until a set date (weeks, months, or years).  
